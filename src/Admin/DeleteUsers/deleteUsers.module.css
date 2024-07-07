@@ -1,0 +1,13 @@
+.users{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 7px;
+    padding-left: 10px;
+}
+
+.logo{
+    cursor: pointer;
+}
+
+

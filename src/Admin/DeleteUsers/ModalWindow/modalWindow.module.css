@@ -1,0 +1,39 @@
+.wrapper{
+    z-index: 11;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: blue;
+}
+.modalWindow{
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    margin: 0px auto 0px auto;
+    left: 0;
+    right: 0;
+    width: 470px;
+    height: 220px;
+    background-color: rgb(210, 213, 216);
+    border-radius: 7px;
+    text-align: center;
+}
+.btnModal{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 15px;
+}
+.btn{
+    all: unset;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 11px;
+}
+.userName{
+    margin-top: 15px;
+    font-size: 20px;
+}
