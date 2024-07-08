@@ -1,0 +1,17 @@
+.wrapper{
+    display: grid;
+    grid-template-columns: repeat(5,40px);
+    gap: 5px;
+    margin-top: 10px;
+}
+.ticket{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    height: 40px;
+    background-color: rgb(207, 212, 212);
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}

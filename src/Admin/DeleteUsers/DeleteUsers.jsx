@@ -8,10 +8,10 @@ function DeleteUsers() {
     const [confirm, setConfirm] = React.useState(false);
     const [userEmail, setUserEmail] = React.useState('');
     const [userName, setUserName] = React.useState({});
-    
+
     React.useEffect(() => {
-        const token = localStorage.getItem('token');
         async function getUsers() {
+            const token = localStorage.getItem('token');
             const response = await fetch('http://147.45.159.11/userEditor/getAllUsers', {
                 method: 'GET',
                 headers: {
@@ -23,10 +23,10 @@ function DeleteUsers() {
         }
         getUsers();
     }, []);
-    
+  
     function modalWindow(e) {
         setUserEmail(e.target.getAttribute('email'));
-        setUserName({firstName:e.target.getAttribute('firstname'),secondName:e.target.getAttribute('secondname')})
+        setUserName({ firstName: e.target.getAttribute('firstname'), secondName: e.target.getAttribute('secondname') });
         setModal(true);
     }
 
@@ -49,19 +49,18 @@ function DeleteUsers() {
     }
     return (
         <div className={s.wrapper}>
-            {modal ? <ModalWindow userName = {userName} setConfirm = {setConfirm} setModal = {setModal}/> : ''}
+            {modal ? <ModalWindow userName={userName} setConfirm={setConfirm} setModal={setModal} /> : ''}
             {users.map((user, i) => {
                 return (
                     <p key={user.email} className={s.users}>
-                        {`${i + 1}. `}
-                        {`${user.firstName} ${user.secondName}`}
+                        {i + 1} {user.firstName} {user.secondName}
                         <img
                             email={user.email}
                             firstname={user.firstName}
                             secondname={user.secondName}
                             onClick={modalWindow}
                             className={s.logo}
-                            alt='deleteUser'
+                            alt='logoDelete'
                             src={logo}
                         />
                     </p>
