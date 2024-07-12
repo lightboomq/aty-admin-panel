@@ -13,36 +13,18 @@ function Admin() {
             <Header />
             <Menu />
 
-            {/* <div className={s.content}>
-                <h3 className={s.text}>Создать пустой билет</h3>
-                <GetAllTickets />
-                <CreateEmptyTicket />
-            </div> */}
 
             <div className={s.content}>
-                <h3 className={s.text}>Удалить билет</h3>
-                <DeleteTicket action = 'deleteTicket'/>
+                <h3 className={s.text}>Редактировать билет</h3>
+                <GetAllTickets/>
             </div>
+          
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            {/* <div className={s.content}>
+            <div className={s.content}>
                 <h3>Удалить пользователя из базы данных</h3>
                 <DeleteUsers />
-            </div> */}
+            </div>
         </div>
     );
 }

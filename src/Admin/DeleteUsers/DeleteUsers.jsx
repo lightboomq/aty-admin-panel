@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './deleteUsers.module.css';
 import logo from '../../../assets/deleteUser.svg';
-import ModalWindow from './ModalWindow/ModalWindow.jsx';
+import ModalWindow from '../ModalWindow/ModalWindow.jsx';
 function DeleteUsers() {
     const [users, setUsers] = React.useState([]);
     const [modal, setModal] = React.useState(false);
@@ -12,7 +12,7 @@ function DeleteUsers() {
     React.useEffect(() => {
         async function getUsers() {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://147.45.159.11/userEditor/getAllUsers', {
+            const response = await fetch('http://147.45.159.11/api/userEditor/getAllUsers', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -23,7 +23,7 @@ function DeleteUsers() {
         }
         getUsers();
     }, []);
-  
+
     function modalWindow(e) {
         setUserEmail(e.target.getAttribute('email'));
         setUserName({ firstName: e.target.getAttribute('firstname'), secondName: e.target.getAttribute('secondname') });
@@ -33,7 +33,7 @@ function DeleteUsers() {
     if (confirm) {
         async function deleteUser() {
             const token = localStorage.getItem('token');
-            await fetch('http://147.45.159.11/auth/deleteUser', {
+            await fetch('http://147.45.159.11/api/auth/deleteUser', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -49,7 +49,16 @@ function DeleteUsers() {
     }
     return (
         <div className={s.wrapper}>
-            {modal ? <ModalWindow userName={userName} setConfirm={setConfirm} setModal={setModal} /> : ''}
+            {modal ? (
+                <ModalWindow
+                    value1='Удалить пользователя?'
+                    value2={`${userName.firstName} ${userName.secondName}`}
+                    setConfirm={setConfirm}
+                    setModal={setModal}
+                />
+            ) : (
+                ''
+            )}
             {users.map((user, i) => {
                 return (
                     <p key={user.email} className={s.users}>

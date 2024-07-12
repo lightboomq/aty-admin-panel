@@ -1,6 +1,6 @@
 import React from 'react';
 import s from './login.module.css';
-import {useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const [login, setLogin] = React.useState('your_email@yandex.ru');
@@ -10,7 +10,7 @@ function Login() {
 
     async function enter() {
         try {
-            const response = await fetch('http://147.45.159.11/auth/adminLogin', {
+            const response = await fetch('http://147.45.159.11/api/auth/adminLogin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

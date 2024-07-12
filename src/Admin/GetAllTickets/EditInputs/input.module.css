@@ -1,0 +1,22 @@
+textarea{
+    all:unset;
+    resize: none;
+    width: 100%;
+}
+.question{
+    margin-top: 10px;
+    font-weight: bolder;
+}
+.wrapperAnswer{
+    display: flex;
+}
+.answer{
+    margin-top: 10px;
+}
+.help{
+    resize: vertical;    
+}
+textarea:hover{
+    
+    border: 1px soilid black;
+}
