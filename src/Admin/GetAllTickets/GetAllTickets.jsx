@@ -12,6 +12,33 @@ function GetAllTickets() {
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
     const [idSelectedQuestion, setIdSelectedQuestion] = React.useState([]);
 
+    async function saveTicket() {
+        const form = selectedTicketRef.current;
+
+        
+        const arr = []
+        arr.push(form.elements[1].textContent)
+        arr.push(form.elements[3].textContent)
+        arr.push(form.elements[5].textContent)
+        console.log(form.elements[5].textContent)
+        // const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
+        //     method: 'PATH',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         Authorization: `Bearer ${token}`,
+        //     },
+        //     body: JSON.stringify({
+        //         ticketId: idSelectedTicket,+
+        //         questionId: idQuestion,+
+        //         question:form[0].textContent,+
+        //         help:form.elements[7].textContent
+        //         correctAnswer: correctAnswer,
+        //         answers: arr, +
+        //     }),
+        // });
+        
+    }
+
     React.useEffect(() => {
         async function getTickets() {
             const response = await fetch('http://147.45.159.11/api/ticketEditor/tickets', {
@@ -58,17 +85,6 @@ function GetAllTickets() {
     }
 
     const selectedTicketRef = React.useRef(null);
-    function saveTicket() {
-       
-        const formData = new FormData(selectedTicketRef.current);
-        
-       
-        for(const date of formData){
-            console.log(date)
-        }
-        
-        
-    }
 
     return (
         <>
