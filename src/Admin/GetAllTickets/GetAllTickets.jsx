@@ -4,6 +4,7 @@ import Loader from '../Loader/Loader.jsx';
 import EditQuestion from './EditQuestion/EditQuestion.jsx';
 function GetAllTickets() {
     const token = localStorage.getItem('token');
+    const [isLoading, setIsLoading] = React.useState(false);
     const [allTickets, setAllTickets] = React.useState([]);
     const [selectedTicket, setSelectedTicket] = React.useState([]);
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
@@ -30,6 +31,7 @@ function GetAllTickets() {
     async function getTicket(e) {
         const ticketId = e.target.getAttribute('ticketid');
 
+        setIsLoading(true);
         const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
             method: 'POST',
             headers: {
@@ -41,10 +43,11 @@ function GetAllTickets() {
             }),
         });
         const jsonTicket = await res.json();
+        setIsLoading(false);
         setSelectedTicket(jsonTicket);
         setIdSelectedTicket(ticketId);
         setIndexTicket(Number(e.target.textContent) - 1);
-        setIsTagSelect(true);
+        setIsTagSelect(!isTagSelect);
     }
 
     function getSelect() {
@@ -65,10 +68,10 @@ function GetAllTickets() {
     }
 
     function highlight(ticket, idSelectedTicket) {
-        if (idSelectedTicket === ticket.ticketId) return `${s.ticketCard} ${s.ticketCardActive}`;
+        if (idSelectedTicket === ticket.ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;
     }
-
+console.log(isLoading)
     return (
         <>
             <div className={s.wrapper}>
@@ -81,6 +84,7 @@ function GetAllTickets() {
                             className={highlight(ticket, idSelectedTicket)}
                         >
                             {i + 1}
+                            {i === indexTicket && isLoading ? <Loader /> : ''}
                         </div>
                     );
                 })}
