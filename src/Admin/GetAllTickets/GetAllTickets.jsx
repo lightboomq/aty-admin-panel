@@ -1,43 +1,17 @@
 import React from 'react';
 import s from './getAllTickets.module.css';
 import Loader from '../Loader/Loader.jsx';
-import InputQuestion from './EditInputs/InputQuestion.jsx';
-import InputAnswer from './EditInputs/InputAnswer.jsx';
-import InputHelp from './EditInputs/InputHelp.jsx';
+import EditQuestion from './EditQuestion/EditQuestion.jsx';
 function GetAllTickets() {
     const token = localStorage.getItem('token');
     const [allTickets, setAllTickets] = React.useState([]);
-
     const [selectedTicket, setSelectedTicket] = React.useState([]);
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
-    const [idSelectedQuestion, setIdSelectedQuestion] = React.useState([]);
-
-    async function saveTicket() {
-        const form = selectedTicketRef.current;
-
-        
-        const arr = []
-        arr.push(form.elements[1].textContent)
-        arr.push(form.elements[3].textContent)
-        arr.push(form.elements[5].textContent)
-        console.log(form.elements[5].textContent)
-        // const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
-        //     method: 'PATH',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         Authorization: `Bearer ${token}`,
-        //     },
-        //     body: JSON.stringify({
-        //         ticketId: idSelectedTicket,+
-        //         questionId: idQuestion,+
-        //         question:form[0].textContent,+
-        //         help:form.elements[7].textContent
-        //         correctAnswer: correctAnswer,
-        //         answers: arr, +
-        //     }),
-        // });
-        
-    }
+    const [isTagSelect, setIsTagSelect] = React.useState(false);
+    const [isEditQuestion, setIsEditQuestion] = React.useState(false);
+    const [indexTicket, setIndexTicket] = React.useState(null);
+    const selectedTicketRef = React.useRef(null);
+    const selectRef = React.useRef(null);
 
     React.useEffect(() => {
         async function getTickets() {
@@ -53,7 +27,6 @@ function GetAllTickets() {
         getTickets();
     }, [token]);
 
-    const [idQuestions, setIdQuestions] = React.useState([]);
     async function getTicket(e) {
         const ticketId = e.target.getAttribute('ticketid');
 
@@ -70,21 +43,31 @@ function GetAllTickets() {
         const jsonTicket = await res.json();
         setSelectedTicket(jsonTicket);
         setIdSelectedTicket(ticketId);
-        //setIdQuestions(shapes)
+        setIndexTicket(Number(e.target.textContent) - 1);
+        setIsTagSelect(true);
     }
 
-    function save(e) {
-        // const questionId = e.target.getAttribute('questionid');
-        // console.log(e.target.textContent);
-        // console.log('ticketId: ', idSelectedTicket);
-        // console.log('questionId: ', questionId);
+    function getSelect() {
+        const select = selectRef.current.value;
+        const number = parseInt(select.match(/\d+/));
+
+        switch (select) {
+            case `changeQuestion ${number}`:
+                setIsEditQuestion(true);
+                setIndexTicket(number - 1);
+                break;
+            case 'addQuestion':
+                console.log('addQuestion');
+                break;
+            default:
+                break;
+        }
     }
+
     function highlight(ticket, idSelectedTicket) {
         if (idSelectedTicket === ticket.ticketId) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;
     }
-
-    const selectedTicketRef = React.useRef(null);
 
     return (
         <>
@@ -102,55 +85,31 @@ function GetAllTickets() {
                     );
                 })}
             </div>
+            {isTagSelect && (
+                <div>
+                    <select ref={selectRef} onChange={getSelect}>
+                        <option value=''>Выберите операцию </option>
+                        {selectedTicket.map((number, i) => {
+                            return <option key={number.questionId} value={`changeQuestion ${i + 1}`}>{`Изменить вопрос: ${i + 1}`}</option>;
+                        })}
+
+                        <option value='addQuestion'>Добавить вопрос в билет </option>
+                    </select>
+                </div>
+            )}
 
             <div className={s.wrapperTicket}>
-                <button onClick={saveTicket} type='button'>
-                    Сохранить
-                </button>
-                <form ref={selectedTicketRef}>
-                    {selectedTicket.map(item => {
-                        const correctAnswer = item.answers.findIndex(obj => obj.isCorrect === true);
-
-                        return (
-                            <div key={item.questionId} onClick={save} className={s.wrapperQuestion}>
-                                {item.img ? (
-                                    <img className={s.picture} src={item.img} alt='' />
-                                ) : (
-                                    <div className={`${s.withoutPicture} `}>Вопрос без рисунка</div>
-                                )}
-
-                                <InputQuestion question={item.question} />
-
-                                <div>
-                                    {item.answers.map((answer, i) => {
-                                        return (
-                                            <InputAnswer
-                                                key={`${answer}${i + 1}`}
-                                                answerText={answer.answerText}
-                                                i={i}
-                                                questionId={item.questionId}
-                                                checked={i === correctAnswer ? true : ''}
-                                            />
-                                        );
-                                    })}
-                                </div>
-
-                                <InputHelp helpText={item.help} />
-                            </div>
-                        );
-                    })}
-                </form>
+                {isEditQuestion && (
+                    <EditQuestion
+                        selectedTicket={selectedTicket}
+                        indexTicket={indexTicket}
+                        idSelectedTicket={idSelectedTicket}
+                        selectedTicketRef={selectedTicketRef}
+                    />
+                )}
             </div>
         </>
     );
 }
 
 export default GetAllTickets;
-// const nodes = ticketRef.current.childNodes;
-// const arr = selectedTicket.map(item => item.questionId);
-// console.log(arr);
-// console.log(nodes[1].childNodes[1].textContent);
-
-// for (let i = 0; i < nodes.length - 1; i++) {
-//     console.log(nodes[i].childNodes[1].textContent);
-// }

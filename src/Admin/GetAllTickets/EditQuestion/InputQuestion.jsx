@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './input.module.css';
+import s from './editQuestion.module.css';
 function InputQuestion({ question }) {
     const [state, setState] = React.useState(question);
     const questionRef = React.useRef(null);
@@ -11,7 +11,7 @@ function InputQuestion({ question }) {
         const heigth = questionRef.current.scrollHeight;
         questionRef.current.style.height = `${heigth}px`;
     }
-    return <textarea ref={questionRef}  onInput={getHeight} name='question' type='text' value={state} onChange={e => setState(e.target.value)} className={s.question} />;
+    return <textarea ref={questionRef}  onInput={getHeight} name='questionId' type='text' value={state} onChange={e => setState(e.target.value)} className={s.question} />;
 }
 
 export default InputQuestion;

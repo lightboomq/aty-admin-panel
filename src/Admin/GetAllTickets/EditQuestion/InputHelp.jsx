@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './input.module.css';
+import s from './editQuestion.module.css';
 function InputHelp({ helpText }) {
     const [state, setState] = React.useState(helpText);
 
@@ -14,7 +14,7 @@ function InputHelp({ helpText }) {
     }
     
 
-    return <textarea ref={helpRef} onInput={getHeight} type='text' value={state} onChange={e => setState(e.target.value)}  className={s.textarea} />;
+    return <textarea ref={helpRef} onInput={getHeight} type='text' name='help' value={state} onChange={e => setState(e.target.value)}  className={s.textarea} />;
 }
 
 export default InputHelp;
