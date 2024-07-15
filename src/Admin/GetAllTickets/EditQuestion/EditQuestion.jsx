@@ -17,11 +17,11 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, selectedT
         
         console.log()
         // formData.set('answer', JSON.parse(JSON.stringify(arrAnswers)))
-        formData.delete('answer')
+       
 
         formData.delete(selectedTicket[indexTicket].questionId);
        
-        formData.append('answer',JSON.stringify(arrAnswers))
+        formData.set('answer',JSON.stringify(arrAnswers))
         formData.append('correctAnswer', correctAnswer);
 
         for (const data of formData) {
