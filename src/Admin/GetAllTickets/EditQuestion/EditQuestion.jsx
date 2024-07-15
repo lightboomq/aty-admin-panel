@@ -13,30 +13,27 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, selectedT
 
         formData.append('ticketId', idSelectedTicket);
         formData.append('questionId', selectedTicket[indexTicket].questionId);
-        const arrAnswers  = formData.getAll('answer');
-        
-        console.log()
-        // formData.set('answer', JSON.parse(JSON.stringify(arrAnswers)))
-       
+        const arrAnswers = formData.entries('answer');
+
+        console.log(arrAnswers);
 
         formData.delete(selectedTicket[indexTicket].questionId);
-       
-        formData.set('answer',JSON.stringify(arrAnswers))
+
+        formData.set('answer', JSON.stringify(arrAnswers));
         formData.append('correctAnswer', correctAnswer);
 
-        for (const data of formData) {
-           console.log(data);
-        }
-        const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
-            method: 'PATCH',
-            headers: {
-
-                Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
-        const jsonRes = await res.json();
-        console.log(jsonRes);
+        // for (const data of formData) {
+        //     console.log(data);
+        // }
+        // const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
+        //     method: 'PATCH',
+        //     headers: {
+        //         Authorization: `Bearer ${token}`,
+        //     },
+        //     body: formData,
+        // });
+        // const jsonRes = await res.json();
+        // console.log(jsonRes);
     }
 
     return (
