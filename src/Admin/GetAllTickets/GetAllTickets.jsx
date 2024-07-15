@@ -28,27 +28,7 @@ function GetAllTickets() {
         getTickets();
     }, [token]);
 
-    async function getTicket(e) {
-        const ticketId = e.target.getAttribute('ticketid');
-
-        setIsLoading(true);
-        const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-                ticketId: ticketId,
-            }),
-        });
-        const jsonTicket = await res.json();
-        setIsLoading(false);
-        setSelectedTicket(jsonTicket);
-        setIdSelectedTicket(ticketId);
-        setIndexTicket(Number(e.target.textContent) - 1);
-        setIsTagSelect(!isTagSelect);
-    }
+ 
 
     function getSelect() {
         const select = selectRef.current.value;
@@ -71,11 +51,34 @@ function GetAllTickets() {
         if (idSelectedTicket === ticket.ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;
     }
-console.log(isLoading)
+ 
+    async function getTicket(e) {
+        const ticketId = e.target.getAttribute('ticketid');
+        setIndexTicket(Number(e.target.textContent) - 1);
+        setIsLoading(true);
+        const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                ticketId: ticketId,
+            }),
+        });
+        const jsonTicket = await res.json();
+        setIsLoading(false);
+        setSelectedTicket(jsonTicket);
+        setIdSelectedTicket(ticketId);
+        setIsTagSelect(true);
+        
+    }
+
     return (
         <>
             <div className={s.wrapper}>
                 {allTickets.map((ticket, i) => {
+                    
                     return (
                         <div
                             key={ticket.ticketId}
@@ -84,9 +87,10 @@ console.log(isLoading)
                             className={highlight(ticket, idSelectedTicket)}
                         >
                             {i + 1}
-                            {i === indexTicket && isLoading ? <Loader /> : ''}
+                            {i === indexTicket && isLoading ? <Loader />  : ''}
+                            
                         </div>
-                    );
+                    ); 
                 })}
             </div>
             {isTagSelect && (

@@ -5,24 +5,35 @@ import InputHelp from './InputHelp.jsx';
 import s from './editQuestion.module.css';
 function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, selectedTicketRef }) {
     const correctAnswer = selectedTicket[indexTicket].answers.findIndex(obj => obj.isCorrect === true);
+
     const token = localStorage.getItem('token');
+
     async function saveTicket() {
         const formData = new FormData(selectedTicketRef.current);
 
-        const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
-            method: 'POST',
+        formData.append('ticketId', idSelectedTicket);
+        formData.append('questionId', selectedTicket[indexTicket].questionId);
+        const arrAnswers  = formData.getAll('answer');
+        
+        console.log()
+        // formData.set('answer', JSON.parse(JSON.stringify(arrAnswers)))
+        formData.delete('answer')
+
+        formData.delete(selectedTicket[indexTicket].questionId);
+       
+        formData.append('answer',JSON.stringify(arrAnswers))
+        formData.append('correctAnswer', correctAnswer);
+
+        for (const data of formData) {
+           console.log(data);
+        }
+        const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
+            method: 'PATCH',
             headers: {
-                'Content-Type': 'multipart/form-data',
+
                 Authorization: `Bearer ${token}`,
             },
-            body: {
-                ticketId: idSelectedTicket,
-                questionId: selectedTicket[indexTicket].qeustionId,
-                question: formData.get('questionId'),
-                help: formData.get('help'),
-                correctAnswer: correctAnswer,
-                answers: formData.getAll('answer'),
-            },
+            body: formData,
         });
         const jsonRes = await res.json();
         console.log(jsonRes);
