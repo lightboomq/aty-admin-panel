@@ -1,7 +1,7 @@
 import React from 'react';
-import s from './deleteUsers.module.css';
+import s from '../styles/deleteUsers.module.css';
 import logo from '../../../assets/deleteUser.svg';
-import ModalWindow from '../ModalWindow/ModalWindow.jsx';
+// import ModalWindow from '../ModalWindow/ModalWindow.jsx';
 function DeleteUsers() {
     const [users, setUsers] = React.useState([]);
     const [modal, setModal] = React.useState(false);
@@ -24,16 +24,10 @@ function DeleteUsers() {
         getUsers();
     }, []);
 
-    function modalWindow(e) {
-        setUserEmail(e.target.getAttribute('email'));
-        setUserName({ firstName: e.target.getAttribute('firstname'), secondName: e.target.getAttribute('secondname') });
-        setModal(true);
-    }
-
     if (confirm) {
         async function deleteUser() {
             const token = localStorage.getItem('token');
-            await fetch('http://147.45.159.11/api/auth/deleteUser', {
+            await fetch('http://147.45.159.11/api/userEditor/deleteUser', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,22 +41,40 @@ function DeleteUsers() {
         deleteUser();
         setConfirm(false);
     }
+
+    function modalWindow(e) {
+        setUserEmail(e.target.getAttribute('email'));
+        setUserName({ firstName: e.target.getAttribute('firstname'), secondName: e.target.getAttribute('secondname') });
+        setModal(true);
+    }
+    function test(){
+        setConfirm(
+            confirm(`Удалить пользователя? ${userName.firstName} ${userName.secondName} Все данные будут удалены безвозвратно.`)
+        )
+        setModal(false)
+    }
+    function highlightUser(i) {
+        if (i % 2 === 0) return `${s.users} ${s.higlight}`;
+        return s.users;
+    }
     return (
         <div className={s.wrapper}>
-            {modal ? (
-                <ModalWindow
-                    value1='Удалить пользователя?'
-                    value2={`${userName.firstName} ${userName.secondName}`}
-                    setConfirm={setConfirm}
-                    setModal={setModal}
-                />
-            ) : (
-                ''
-            )}
+            {modal &&
+                test
+                
+                // <ModalWindow
+                //     value1='Удалить пользователя?'
+                //     value2={`${userName.firstName} ${userName.secondName}`}
+                //     setConfirm={setConfirm}
+                //     setModal={setModal}
+                // />
+            }
+
             {users.map((user, i) => {
                 return (
-                    <p key={user.email} className={s.users}>
-                        {i + 1} {user.firstName} {user.secondName}
+                    <p key={user.email} className={highlightUser(i)}>
+                        {i + 1}
+                        {'.'} {user.firstName} {user.secondName}
                         <img
                             email={user.email}
                             firstname={user.firstName}

@@ -4,14 +4,7 @@
     gap: 5px;
     margin-top: 10px;
 }
-select{
-    width: 250px;
-    height: 35px;
-    margin-top: 10px;
-    font-size: 15px;
-    text-align: center;
-    cursor: pointer;
-}
+
 .ticketCard{
     display: flex;
     justify-content: center;
@@ -22,16 +15,20 @@ select{
     border-radius: 5px;
     cursor: pointer;
 }
+
+select{
+    width: 250px;
+    height: 35px;
+    margin-top: 10px;
+    font-size: 15px;
+    text-align: center;
+    cursor: pointer;
+}
 .ticketCardActive{
     background-color: green;
     color: white;
 }
 
-.wrapperTicket{
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-}
 
 
 

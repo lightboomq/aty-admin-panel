@@ -3,42 +3,30 @@ import InputQuestion from './InputQuestion.jsx';
 import InputAnswer from './InputAnswer.jsx';
 import InputHelp from './InputHelp.jsx';
 import s from './editQuestion.module.css';
-function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, selectedTicketRef }) {
+function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket }) {
     const correctAnswer = selectedTicket[indexTicket].answers.findIndex(obj => obj.isCorrect === true);
 
     const token = localStorage.getItem('token');
 
-    async function saveTicket() {
-        const formData = new FormData(selectedTicketRef.current);
+    async function saveTicket(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
 
         formData.append('ticketId', idSelectedTicket);
         formData.append('questionId', selectedTicket[indexTicket].questionId);
-        const arrAnswers = formData.entries('answer');
 
-        console.log(arrAnswers);
-
-        formData.delete(selectedTicket[indexTicket].questionId);
-
-        formData.set('answer', JSON.stringify(arrAnswers));
-        formData.append('correctAnswer', correctAnswer);
-
-        // for (const data of formData) {
-        //     console.log(data);
-        // }
-        // const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
-        //     method: 'PATCH',
-        //     headers: {
-        //         Authorization: `Bearer ${token}`,
-        //     },
-        //     body: formData,
-        // });
-        // const jsonRes = await res.json();
-        // console.log(jsonRes);
+        await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
+            method: 'PATCH',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+        });
     }
 
     return (
-        <div className={s.wrapperQuestion}>
-            <form ref={selectedTicketRef}>
+        <div className={s.wrapper}>
+            <form onSubmit={saveTicket}>
                 <div key={selectedTicket[indexTicket].questionId}>
                     {selectedTicket[indexTicket].img ? (
                         <img className={s.picture} src={selectedTicket[indexTicket].img} alt='' />
@@ -54,8 +42,9 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, selectedT
                                 <InputAnswer
                                     key={`${answer}${i + 1}`}
                                     answerText={answer.answerText}
-                                    questionId={selectedTicket[indexTicket].questionId}
+                                    correctAnswer={correctAnswer}
                                     isChecked={i === correctAnswer ? true : ''}
+                                    i={i}
                                 />
                             );
                         })}
@@ -63,10 +52,10 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, selectedT
 
                     <InputHelp helpText={selectedTicket[indexTicket].help} />
                 </div>
+                <button type='submit' className={s.btn}>
+                    Сохранить изменения
+                </button>
             </form>
-            <button type='button' onClick={saveTicket} className={s.btn}>
-                Сохранить изменения
-            </button>
         </div>
     );
 }

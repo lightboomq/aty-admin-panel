@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './menu.module.css'
+import s from '../styles/menu.module.css'
 function Menu() {
     const arr = ['Тест1','Тест1','Тест1','Тест1','Тест1','Тест1','Тест1','Тест1','Тест1','Тест1','Тест1',]
     return(

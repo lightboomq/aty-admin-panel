@@ -1,5 +1,5 @@
 import React from 'react';
-import s from './header.module.css'
+import s from '../styles/header.module.css'
 function Header() {
   return (
     <div className={s.wrapper}>

@@ -2,12 +2,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 7px;
     padding-left: 10px;
+    height: 40px;
+    background: rgba(223, 229, 231, 0.26);
 }
 
 .logo{
     cursor: pointer;
+}
+.higlight{
+    background: rgba(225, 228, 231, 0.712);
 }
 
 

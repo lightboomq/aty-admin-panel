@@ -1,11 +1,10 @@
 import React from 'react';
 import s from './admin.module.css';
-import Header from './Header/Header.jsx';
-import Menu from './Menu/Menu.jsx';
-import GetAllTickets from './GetAllTickets/GetAllTickets.jsx';
-import CreateEmptyTicket from './CreateEmptyTicket/CreateEmptyTicket.jsx';
-import DeleteTicket from './DeleteTicket/DeleteTicket.jsx';
-import DeleteUsers from './DeleteUsers/DeleteUsers.jsx';
+import Header from './Componets/Header.jsx';
+import Menu from './Componets/Menu.jsx';
+import EditTickets from './Componets/EditTickets/EditTickets.jsx';
+
+import DeleteUsers from './Componets/DeleteUsers.jsx';
 
 function Admin() {
     return (
@@ -13,13 +12,10 @@ function Admin() {
             <Header />
             <Menu />
 
-
             <div className={s.content}>
                 <h3 className={s.text}>Редактировать билет</h3>
-                <GetAllTickets/>
+                <EditTickets />
             </div>
-          
-
 
             <div className={s.content}>
                 <h3>Удалить пользователя из базы данных</h3>

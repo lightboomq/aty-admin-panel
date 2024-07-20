@@ -1,0 +1,18 @@
+.wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 3px solid rgb(7, 33, 90);
+    width: 40px;
+    height: 40px;
+  }
+.plus{
+    font-size: 1.8em;
+    font-weight: 200;
+    color: rgb(7, 33, 90);
+    cursor: pointer;
+}
+.wrapper:active{
+    transform: translateY(-3px);
+}
