@@ -1,8 +1,8 @@
 
-async function DeleteTicket(e,idSelectedTicket,token) {
+async function DeleteTicket(idSelectedTicket) {
     
     const action = confirm('Удалить выбраный билет? Все данные безвозратно будут удалены')
-    console.log(action)
+    const token = localStorage.getItem('token')
     if(!action) return;
     await fetch('http://147.45.159.11/api/ticketEditor/deleteTicket', {
         method: 'DELETE',

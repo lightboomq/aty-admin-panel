@@ -75,7 +75,7 @@ function EditTickets() {
                 setIndexTicket(number - 1);
                 break;
             case 'deleteTicket':
-                confirm && deleteTicket(idSelectedTicket, token);
+                confirm && deleteTicket(idSelectedTicket);
                 break;
             default:
                 break;
