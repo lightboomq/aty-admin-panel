@@ -18,8 +18,11 @@
     font-size: clamp(25px, 8vw, 50px); 
 }
 .answers{
+    width: 100%;
     list-style-type: none;
     margin-top: 10px;
+    padding-left: 5px;
+    margin-left: 5px;
 }
 .help{
     margin-top: 10px;
@@ -27,7 +30,8 @@
 
 
 textarea{
-    all:unset;
+    overflow: hidden;
+    resize: vertical;
     width: 100%;
 }
 .question{

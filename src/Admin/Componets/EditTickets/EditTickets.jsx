@@ -1,26 +1,26 @@
 import React from 'react';
 import s from '../../styles/EditTickets/editTickets.module.css';
 import Loader from '../Loader.jsx';
+import CreateTicket from './CreateEmptyTicket.jsx';
 import EditQuestion from './EditQuestion/EditQuestion.jsx';
 import AddQuestion from './AddQuestion.jsx';
-import CreateTicket from './CreateEmptyTicket.jsx';
-import deleteTicket from './DeleteTicket.js';
+import DeleteQuestion from './DeleteQuestion.jsx';
+import DeleteTicket from './DeleteTicket.js';
 
 function EditTickets() {
     const token = localStorage.getItem('token');
-
+    const selectRef = React.useRef(null);
     const [allTickets, setAllTickets] = React.useState([]);
     const [selectedTicket, setSelectedTicket] = React.useState([]);
-    const [lengthTicket,setLengthTicket] = React.useState(null);
+    const [lengthTicket, setLengthTicket] = React.useState(null);
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
     const [indexTicket, setIndexTicket] = React.useState(null);
-    const selectRef = React.useRef(null);
     const [isLoading, setIsLoading] = React.useState(false);
     const [isTagSelect, setIsTagSelect] = React.useState(false);
-    const [isAddQuestion, setIsAddQuestion] = React.useState(false);
     const [isEditQuestion, setIsEditQuestion] = React.useState(false);
-    
-    
+    const [isAddQuestion, setIsAddQuestion] = React.useState(false);
+    const [isDeleteQuestion, setIsDeleteQuestion] = React.useState(false);
+
     React.useEffect(() => {
         async function getTickets() {
             const response = await fetch('http://147.45.159.11/api/ticketEditor/tickets', {
@@ -40,7 +40,7 @@ function EditTickets() {
         setIndexTicket(Number(e.target.textContent) - 1);
         setIsLoading(true);
         setIsTagSelect(false);
-        setIsEditQuestion(false)
+        setIsEditQuestion(false);
         const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
             method: 'POST',
             headers: {
@@ -56,7 +56,7 @@ function EditTickets() {
         setSelectedTicket(jsonTicket);
         setIdSelectedTicket(ticketId);
         setIsTagSelect(true);
-        setLengthTicket(jsonTicket.length+1)
+        setLengthTicket(jsonTicket.length + 1);
     }
 
     function getSelect() {
@@ -65,17 +65,25 @@ function EditTickets() {
 
         switch (select) {
             case `changeQuestion ${number}`:
-                setIsAddQuestion(false);
                 setIsEditQuestion(true);
+                setIsAddQuestion(false);
+                setIsDeleteQuestion(false);
                 setIndexTicket(number - 1);
                 break;
             case 'addQuestion':
                 setIsEditQuestion(false);
                 setIsAddQuestion(true);
+                setIsDeleteQuestion(false);
                 setIndexTicket(number - 1);
+
+                break;
+            case 'deleteQuestion':
+                setIsEditQuestion(false);
+                setIsAddQuestion(false);
+                setIsDeleteQuestion(true);
                 break;
             case 'deleteTicket':
-                confirm && deleteTicket(idSelectedTicket);
+                DeleteTicket(idSelectedTicket);
                 break;
             default:
                 break;
@@ -110,11 +118,13 @@ function EditTickets() {
                 <div>
                     <select ref={selectRef} onChange={getSelect}>
                         <option value=''>Выберите операцию </option>
+
                         {selectedTicket.map((number, i) => {
                             return <option key={number.questionId} value={`changeQuestion ${i + 1}`}>{`Изменить вопрос: ${i + 1}`}</option>;
                         })}
 
                         <option value='addQuestion'>Добавить вопрос в билет </option>
+                        <option value='deleteQuestion'>Удалить вопрос из билета </option>
                         <option value='deleteTicket'>Удалить билет </option>
                     </select>
                 </div>
@@ -124,7 +134,10 @@ function EditTickets() {
                 <EditQuestion selectedTicket={selectedTicket} indexTicket={indexTicket} idSelectedTicket={idSelectedTicket} />
             )}
 
-            {isAddQuestion && <AddQuestion idSelectedTicket={idSelectedTicket} lengthTicket = {lengthTicket} setLengthTicket={setLengthTicket}/>}
+            {isAddQuestion && (
+                <AddQuestion idSelectedTicket={idSelectedTicket} lengthTicket={lengthTicket} setLengthTicket={setLengthTicket} />
+            )}
+            {isDeleteQuestion && <DeleteQuestion selectedTicket={selectedTicket} idSelectedTicket={idSelectedTicket} />}
         </>
     );
 }

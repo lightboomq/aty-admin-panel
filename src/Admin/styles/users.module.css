@@ -1,0 +1,30 @@
+
+.users{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    height: 40px;
+    background: rgba(223, 229, 231, 0.26);
+    margin-top: 7px;
+}
+.logo{
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.higlight{
+    background: rgba(225, 228, 231, 0.712);
+}
+.higlightExam{
+    background: green;
+}
+.wrapperUserResult{
+    position: absolute;
+    z-index: 22;
+    width: auto;
+    height: auto;
+    left: 0;
+    background-color: rgb(225, 225, 235);
+}

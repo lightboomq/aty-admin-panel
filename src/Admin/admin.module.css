@@ -3,11 +3,10 @@
    max-width: 1400px;
    margin: auto;
    display: grid;
-   grid-template-columns: 25% 75%;   
+   grid-template-columns: 45% 55%;   
 }
 .content{
-    margin:40px 0px 0px 20px;
+    margin:20px 0px 0px 0px;
     border-bottom: 1px solid gainsboro;
     padding-bottom: 15px;
 }
-

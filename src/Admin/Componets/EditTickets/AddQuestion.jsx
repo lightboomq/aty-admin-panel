@@ -6,22 +6,7 @@ function AddQuestion({ idSelectedTicket,lengthTicket,setLengthTicket}) {
     const [inputCount, setInputCount] = React.useState([1, 1]);
    
     
-    async function saveQuestion(e) {
-        e.preventDefault();
-        const token = localStorage.getItem('token');
-        const form = new FormData(e.target);
-
-        form.append('ticketId', idSelectedTicket);
-
-        await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: form,
-        });
-        setLengthTicket(lengthTicket+1)
-    }
+   
     
     function createInput() {
         if (inputCount.length > 4) return false;
@@ -34,11 +19,35 @@ function AddQuestion({ idSelectedTicket,lengthTicket,setLengthTicket}) {
         setInputCount(updateState);
     }
 
+    async function saveQuestion(e) {
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        const form = new FormData(e.target);
+
+        form.append('ticketId', idSelectedTicket);
+
+
+
+       const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            body: form,
+        });
+        
+        if(res.ok) setLengthTicket(lengthTicket+1)
+    }
+
+
+  
     return (
         <form onSubmit={saveQuestion} className={s.wrapper}>
             <h4 className={s.numberQuestion}>{`Вопрос: ${lengthTicket}`}</h4>
 
-            <input className={s.inputFile} type='file' />
+           
+
+            <input className={s.inputFile} type='file' name='img' accept="image/*"/>   
 
             <div className={s.wrapperInput}>
                 <div className={s.requiredInput}>*</div>
@@ -70,7 +79,7 @@ function AddQuestion({ idSelectedTicket,lengthTicket,setLengthTicket}) {
                     type='text'
                     name='help'
                     className={`${s.textarea} ${s.helpBtn}`}
-                    placeholder='Введите комментарий к правильному ответу'
+                    placeholder='Введите комментарий к вопросу'
                 />
             </div>
 
