@@ -19,7 +19,7 @@ function InputQuestion({ question }) {
             type='text'
             value={state}
             onChange={e => setState(e.target.value)}
-            className={s.question}
+            className={s.textarea}
         />
     );
 }

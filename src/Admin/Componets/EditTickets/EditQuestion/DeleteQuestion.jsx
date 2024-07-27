@@ -1,9 +1,9 @@
 import React from 'react';
-import s from '../../styles/deleteQuestion.module.css';
-function DeleteQuestion({ selectedTicket, idSelectedTicket }) {
+import s from './editQuestion.module.css';
+function DeleteQuestion({idSelectedTicket, questionId }) {
     const token = localStorage.getItem('token');
-    async function delQuestion(e) {
-        const questionId = e.target.getAttribute('id');
+  
+    async function delQuestion() {
         const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
 
         if (!action) return;
@@ -20,15 +20,9 @@ function DeleteQuestion({ selectedTicket, idSelectedTicket }) {
         });
     }
     return (
-        <div className={s.wrapper}>
-            {selectedTicket.map((question, i) => {
-                return (
-                    <div key={question.questionId} onClick={delQuestion} className={s.questionCard} id={question.questionId}>
-                        {i + 1}
-                    </div>
-                );
-            })}
-        </div>
+        <button type='button' onClick={delQuestion} className={s.btn}>
+            Удалить вопрос
+        </button>
     );
 }
 

@@ -1,16 +1,13 @@
 import React from 'react';
 import s from '../../styles/EditTickets/addQuestion.module.css';
 
+function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
+    const [inputCount, setInputCount] = React.useState([0, 1]);
 
-function AddQuestion({ idSelectedTicket,lengthTicket,setLengthTicket}) {
-    const [inputCount, setInputCount] = React.useState([1, 1]);
-   
-    
-   
-    
+ 
     function createInput() {
         if (inputCount.length > 4) return false;
-        setInputCount([...inputCount, 1]);
+        setInputCount([...inputCount, inputCount[inputCount.length-1] + 1]); // для key 54 строка 
     }
 
     function deleteInput() {
@@ -26,38 +23,35 @@ function AddQuestion({ idSelectedTicket,lengthTicket,setLengthTicket}) {
 
         form.append('ticketId', idSelectedTicket);
 
-
-
-       const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
+        const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
             },
             body: form,
         });
-        
-        if(res.ok) setLengthTicket(lengthTicket+1)
+
+        if (res.ok) {
+            setLengthTicket(lengthTicket + 1);
+            e.target.reset();
+        }
     }
 
-
-  
     return (
         <form onSubmit={saveQuestion} className={s.wrapper}>
             <h4 className={s.numberQuestion}>{`Вопрос: ${lengthTicket}`}</h4>
 
-           
-
-            <input className={s.inputFile} type='file' name='img' accept="image/*"/>   
+            <input className={s.inputFile} type='file' name='img' accept='image/*' />
 
             <div className={s.wrapperInput}>
                 <div className={s.requiredInput}>*</div>
                 <textarea type='text' name='question' className={s.textarea} placeholder='Введите вопрос(обязательное поле)' />
             </div>
 
-            {inputCount.map((_item, i) => {
+            {inputCount.map((el, i) => {
                 
                 return (
-                    <div className={s.wrapperInput} key={i}>
+                    <div className={s.wrapperInput} key={el}>
                         <div className={s.requiredInput}>*</div>
                         <input type='text' name='answers' className={s.inputAnswer} placeholder='Введите ответ(обязательное поле)' />
 
@@ -75,12 +69,7 @@ function AddQuestion({ idSelectedTicket,lengthTicket,setLengthTicket}) {
             </button>
 
             <div className={s.wrapperInput}>
-                <textarea
-                    type='text'
-                    name='help'
-                    className={`${s.textarea} ${s.helpBtn}`}
-                    placeholder='Введите комментарий к вопросу'
-                />
+                <textarea type='text' name='help' className={`${s.textarea} ${s.helpBtn}`} placeholder='Введите комментарий к вопросу' />
             </div>
 
             <button type='submit' className={s.saveBtn}>

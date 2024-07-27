@@ -2,13 +2,12 @@ import React from 'react';
 import s from './admin.module.css';
 import Header from './Componets/Header.jsx';
 import EditTickets from './Componets/EditTickets/EditTickets.jsx';
-import Users from './Componets/Users/Users.jsx';
+import User from './Componets/Users/User.jsx';
 
 function Admin() {
-
     return (
         <div className={s.wrapper}>
-            <Header />
+            {/* <Header /> */}
 
             <div className={s.content}>
                 <h3 className={s.text}>Редактировать билет</h3>
@@ -17,7 +16,7 @@ function Admin() {
 
             <div className={s.content}>
                 <h3>Пользователи</h3>
-                <Users   />
+                <User />
             </div>
         </div>
     );

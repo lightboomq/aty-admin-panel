@@ -20,7 +20,7 @@ function GetResultUser({ email }) {
         });
 
         const jsonRes = await res.json();
-        console.log(jsonRes)
+        
         
     }
     return <img src={logo} email={email} onClick={resultExam} className={s.logo} alt='resultExam' />;

@@ -1,9 +1,9 @@
-
 import React from 'react';
 import InputQuestion from './InputQuestion.jsx';
 import InputAnswer from './InputAnswer.jsx';
 import InputHelp from './InputHelp.jsx';
 import s from './editQuestion.module.css';
+import DeleteQuestion from './DeleteQuestion.jsx';
 function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket }) {
     const correctAnswer = selectedTicket[indexTicket].answers.findIndex(obj => obj.isCorrect === true);
 
@@ -16,6 +16,9 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket }) {
         formData.append('ticketId', idSelectedTicket);
         formData.append('questionId', selectedTicket[indexTicket].questionId);
 
+        for (const date of formData) {
+            console.log(date);
+        }
         await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
             method: 'PATCH',
             headers: {
@@ -35,6 +38,7 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket }) {
                         <div className={`${s.withoutPicture} `}>Вопрос без рисунка</div>
                     )}
 
+                    <input name='img' type='file' />
                     <InputQuestion question={selectedTicket[indexTicket].question} />
 
                     <div>
@@ -53,9 +57,12 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket }) {
 
                     <InputHelp helpText={selectedTicket[indexTicket].help} />
                 </div>
-                <button type='submit' className={s.btn}>
-                    Сохранить изменения
-                </button>
+                <div className={s.wrapperBtn}>
+                    <button type='submit' className={s.btn}>
+                        Сохранить изменения
+                    </button>
+                    <DeleteQuestion idSelectedTicket={idSelectedTicket} questionId={selectedTicket[indexTicket].questionId}/>
+                </div>
             </form>
         </div>
     );

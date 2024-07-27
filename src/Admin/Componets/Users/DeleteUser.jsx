@@ -3,10 +3,10 @@ import logoMan from '../../../../assets/man.png';
 import logoWoman from '../../../../assets/woman.png';
 import s from '../../styles/users.module.css';
 
-function DeleteUser({ email, userName, woman }) {
+function DeleteUser({ email, userName, gender }) {
     
     async function deleteUser(e) {
-        const action = confirm(`Удалить пользователя ${userName}? Все данные будут удалены безвозвратно`);
+        const action = confirm(`Удалить пользователя ${userName} из базы данных? Все данные будут удалены безвозвратно`);
         if (!action) return;
         const token = localStorage.getItem('token');
         const email = e.target.getAttribute('email');
@@ -28,7 +28,7 @@ function DeleteUser({ email, userName, woman }) {
             email={email}
             className={s.logo}
             alt='logoDelete'
-            src={woman[woman.length - 1] === 'а' || woman[woman.length - 1] === 'я' ? logoWoman : logoMan}
+            src={gender[gender.length - 1] === 'а' || gender[gender.length - 1] === 'я' ? logoWoman : logoMan}
         />
     );
 }
