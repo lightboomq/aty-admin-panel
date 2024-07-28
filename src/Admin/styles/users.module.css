@@ -4,10 +4,12 @@
     justify-content: space-between;
     align-items: center;
     height: 40px;
-    padding-left: 5px;
-    background: rgba(223, 229, 231, 0.26);
-    margin-top: 7px;
+    margin-top: 10px;
+    background: rgba(221, 224, 224, 0.26);
     font-weight: 200;
+}
+.test{
+    padding-left: 54px;
 }
 .logo{
     width: 32px;
@@ -16,20 +18,28 @@
     cursor: pointer;
 }
 .higlight{
-    background: rgba(225, 228, 231, 0.712);
+    
+    background: rgba(233, 239, 245, 0.712);
 }
 .higlightExam{
     background: green;
 }
-.wrapperUserResult{
-    position: absolute;
-    z-index: 22;
-    width: auto;
-    height: auto;
-    left: 0;
-    background-color: rgb(225, 225, 235);
-}
-.wrapperRender{
+
+
+.title{
+    display: flex;
+    align-items: center;
     font-weight: 200;
-    margin-top: 15px;
+    margin:20px 0px 0px 35px;
+    cursor: pointer;
+    user-select: none; 
+    
 }
+.logoArrow{
+    transform: rotate(180deg);
+}
+
+.logoArrowActive{
+    transform: rotate(0deg);
+}
+

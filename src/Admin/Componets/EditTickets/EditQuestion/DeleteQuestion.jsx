@@ -1,13 +1,15 @@
 import React from 'react';
 import s from './editQuestion.module.css';
-function DeleteQuestion({idSelectedTicket, questionId }) {
+import gif from '../../../../../assets/check.gif';
+function DeleteQuestion({ idSelectedTicket, questionId }) {
+    const [isGif, setIsGif] = React.useState(false);
     const token = localStorage.getItem('token');
-  
+
     async function delQuestion() {
         const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
 
         if (!action) return;
-        await fetch('http://147.45.159.11/api/ticketEditor/deleteQuestion', {
+        const res = await fetch('http://147.45.159.11/api/ticketEditor/deleteQuestion', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,11 +20,20 @@ function DeleteQuestion({idSelectedTicket, questionId }) {
                 questionId: questionId,
             }),
         });
+        setIsGif(true)
+        if(res.ok){
+            setTimeout(()=>{
+                setIsGif(false)
+            },1250)
+        }
     }
     return (
-        <button type='button' onClick={delQuestion} className={s.btn}>
-            Удалить вопрос
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            {isGif && <img style={{marginRight:'10px'}} width={25} height={25} src={gif} alt='gif' />}
+            <button type='button' onClick={delQuestion} className={s.btn}>
+                Удалить вопрос
+            </button>
+        </div>
     );
 }
 

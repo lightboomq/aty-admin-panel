@@ -14,40 +14,27 @@ function Users() {
                 },
             });
             const jsonUsers = await response.json();
-            console.log(jsonUsers);
             setUsers(jsonUsers);
         }
         getUsers();
     }, []);
 
-    function hidden(e){
-        
-    }
     return (
         <div className={s.wrapper}>
-            <h3 onClick={hidden}  className={s.wrapperRender}>Колонна 1
-                <RenderUser users={users.filter(user=>user.department === '1' && !user.isAppointExam)}/>
-            </h3>
+            <RenderUser users={users.filter(user => user.department === '1' && !user.isAppointExam)} department='1' />
 
-            <h3 className={s.wrapperRender}>Колонна 2
-                <RenderUser users={users.filter(user=>user.department === '2' && !user.isAppointExam)}/>
-            </h3>
+            <RenderUser users={users.filter(user => user.department === '2' && !user.isAppointExam)} department='2' />
 
-            <h3 className={s.wrapperRender}>Колонна 3
-                <RenderUser users={users.filter(user=>user.department === '3' && !user.isAppointExam)}/>
-            </h3>
+            <RenderUser users={users.filter(user => user.department === '3' && !user.isAppointExam)} department='3' />
 
-            <h3 className={s.wrapperRender}>Колонна 4
-                <RenderUser users={users.filter(user=>user.department === '4' && !user.isAppointExam)}/>
-            </h3 >
+            <RenderUser users={users.filter(user => user.department === '4' && !user.isAppointExam)} department='4' />
 
-            <h3 className={s.wrapperRender}>Колонна 5
-                <RenderUser users={users.filter(user=>user.department === '5' && !user.isAppointExam)}/>
-            </h3>
+            <RenderUser users={users.filter(user => user.department === '5' && !user.isAppointExam)} department='5' />
 
-            <h3 className={s.wrapperRender}>Экзамен назначен
-                <RenderUser users={users.filter(user=>user.isAppointExam)}/>
-            </h3>
+            {/* <h3 className={s.wrapperRender}>
+                Экзамен назначен
+                <RenderUser users={users.filter(user => user.isAppointExam)} />
+            </h3> */}
 
             {/* <h3 className={s.wrapperRender}>Экзамен сдан
                 <RenderUser users={users.filter(user=>user.isAppointExam)}/>

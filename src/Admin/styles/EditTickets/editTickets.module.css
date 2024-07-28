@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: repeat(10,40px);
     gap: 5px;
-    margin-top: 10px;
+    margin: 10px 0px 0px 40px;
 }
 
 .ticketCard{
@@ -10,16 +10,17 @@
     justify-content: center;
     align-items: center;  
     height: 40px;
-    background-color: rgb(207, 212, 212);
+    background-color: rgba(255, 255, 255, 0.13);
     border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
+    
 }
 
 select{
     width: 250px;
     height: 35px;
-    margin-top: 10px;
+    margin: 10px 0px 0px 40px;
     font-size: 15px;
     text-align: center;
     cursor: pointer;

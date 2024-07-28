@@ -1,13 +1,13 @@
 import React from 'react';
 import s from '../../styles/EditTickets/addQuestion.module.css';
-
+import gif from '../../../../assets/check.gif';
 function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
     const [inputCount, setInputCount] = React.useState([0, 1]);
+    const [isGif, setIsGif] = React.useState(false);
 
- 
     function createInput() {
         if (inputCount.length > 4) return false;
-        setInputCount([...inputCount, inputCount[inputCount.length-1] + 1]); // для key 54 строка 
+        setInputCount([...inputCount, inputCount[inputCount.length - 1] + 1]); // для key 54 строка
     }
 
     function deleteInput() {
@@ -32,8 +32,13 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
         });
 
         if (res.ok) {
-            setLengthTicket(lengthTicket + 1);
-            e.target.reset();
+            setIsGif(true);
+            const timerId = setTimeout(() => {
+                setLengthTicket(lengthTicket + 1);
+                e.target.reset();
+                setIsGif(false);
+                clearTimeout(timerId);
+            }, 1250);
         }
     }
 
@@ -49,7 +54,6 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
             </div>
 
             {inputCount.map((el, i) => {
-                
                 return (
                     <div className={s.wrapperInput} key={el}>
                         <div className={s.requiredInput}>*</div>
@@ -72,9 +76,12 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
                 <textarea type='text' name='help' className={`${s.textarea} ${s.helpBtn}`} placeholder='Введите комментарий к вопросу' />
             </div>
 
-            <button type='submit' className={s.saveBtn}>
-                Сохранить
-            </button>
+            <div className={s.wrapperBtn}>
+                <button type='submit' className={s.saveBtn}>
+                    Сохранить
+                </button>
+                {isGif && <img className={s.gif} src={gif} alt='gif' />}
+            </div>
         </form>
     );
 }

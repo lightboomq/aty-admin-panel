@@ -1,12 +1,20 @@
 
 .wrapper{
-   max-width: 1400px;
+   max-width: 1200px;
    margin: auto;
-   display: grid;
-   grid-template-columns: 45% 55%;   
+}
+.wrapperTitle{
+    display: flex;
+    align-items: center;
+    
 }
 .content{
+    max-width: 800px;
     margin:20px 0px 0px 0px;
-    border-bottom: 1px solid gainsboro;
     padding-bottom: 15px;
+    margin: auto;
+}
+
+.title{
+    margin-left: 10px;
 }
