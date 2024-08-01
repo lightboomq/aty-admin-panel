@@ -1,3 +1,7 @@
+.wrapperTitle{
+    display: flex;
+    align-items: center;
+}
 .wrapper{
     display: grid;
     grid-template-columns: repeat(10,40px);

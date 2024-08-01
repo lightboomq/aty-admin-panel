@@ -1,5 +1,6 @@
 import React from 'react';
 import s from '../../styles/EditTickets/editTickets.module.css';
+import logoEdit from '../../../../assets/editTicket.svg';
 import Loader from '../Loader.jsx';
 import CreateTicket from './CreateEmptyTicket.jsx';
 import EditQuestion from './EditQuestion/EditQuestion.jsx';
@@ -92,6 +93,10 @@ function EditTickets() {
 
     return (
         <>
+            <div className={s.wrapperTitle}>
+                <img src={logoEdit} alt='edit' />
+                <h3 style={{ marginLeft: '10px' }}>Редактировать билет</h3>
+            </div>
             <div className={s.wrapper}>
                 {allTickets.map((ticket, i) => {
                     return (

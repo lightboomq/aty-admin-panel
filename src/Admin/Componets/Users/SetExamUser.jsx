@@ -2,12 +2,11 @@ import React from 'react';
 import s from '../../styles/users.module.css';
 import logo from '../../../../assets/exam.svg';
 function SetExamUser({ email, userName, isAppointExam }) {
-    async function exam(e) {
+    async function exam() {
         const action = confirm(isAppointExam ? `Отменить экзамен ${userName}?` : `Назначить экзамен ${userName}?`);
         if (!action) return;
         const token = localStorage.getItem('token');
-        const email = e.target.getAttribute('email');
-
+        
         await fetch('http://147.45.159.11/api/userEditor/appoint', {
             method: 'POST',
             headers: {
@@ -20,7 +19,7 @@ function SetExamUser({ email, userName, isAppointExam }) {
             }),
         });
     }
-    return <img onClick={exam} email={email} src={logo} alt='exam' className={s.logo} />;
+    return <img onClick={exam} src={logo} alt='exam' className={s.logo} />;
 }
 
 export default SetExamUser;

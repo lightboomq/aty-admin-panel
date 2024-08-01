@@ -1,4 +1,7 @@
-
+.wrapperTitle{
+    display: flex;
+    align-items: center;
+}
 .users{
     display: flex;
     justify-content: space-between;
@@ -8,8 +11,17 @@
     background: rgba(221, 224, 224, 0.26);
     font-weight: 200;
 }
-.test{
-    padding-left: 54px;
+.wrapperSearchUser{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+}
+.inputSeacrhUser{
+    padding-left: 5px;
+}
+.inputSeacrhUser::placeholder{
+    margin-left: 15px;
 }
 .logo{
     width: 32px;
@@ -21,16 +33,13 @@
     
     background: rgba(233, 239, 245, 0.712);
 }
-.higlightExam{
-    background: green;
-}
 
 
 .title{
     display: flex;
     align-items: center;
     font-weight: 200;
-    margin:20px 0px 0px 35px;
+    margin-top: 15px;
     cursor: pointer;
     user-select: none; 
     
@@ -43,3 +52,13 @@
     transform: rotate(0deg);
 }
 
+.userExamResult{
+    z-index: 22;
+    overflow: auto;
+    position: absolute;
+    top:0;
+    left: 28%;
+    width: 800px;
+    height: 90vh;
+    background-color: blueviolet;
+}
