@@ -20,6 +20,12 @@ function EditTickets() {
     const [isEditQuestion, setIsEditQuestion] = React.useState(false);
     const [isAddQuestion, setIsAddQuestion] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState('Выберите операцию');
+
+   
+    const [isImg, setIsImg] = React.useState(false);
+
+
+    
     React.useEffect(() => {
         async function getTickets() {
             const response = await fetch('http://147.45.159.11/api/ticketEditor/tickets', {
@@ -57,7 +63,7 @@ function EditTickets() {
         setIsTagSelect(true);
         setLengthTicket(jsonTicket.length + 1);
     }
-
+ 
     function getSelect() {
         const select = selectRef.current.value;
         const number = Number.parseInt(select.match(/\d+/));
@@ -68,6 +74,7 @@ function EditTickets() {
                 setIsAddQuestion(false);
                 setIndexTicket(number - 1);
                 setSelectedValue('Выберите операцию');
+                setIsImg(false)
                 break;
 
             case 'addQuestion':
@@ -75,22 +82,25 @@ function EditTickets() {
                 setIsAddQuestion(true);
                 setIndexTicket(number - 1);
                 setSelectedValue('Добавить вопрос в билет');
+                setIsImg(false)
                 break;
 
             case 'deleteTicket':
                 DeleteTicket(idSelectedTicket);
                 setSelectedValue('Выберите операцию');
+                setIsImg(false)
                 break;
             default:
                 break;
         }
     }
 
+  
     function highlight(ticket, idSelectedTicket) {
         if (idSelectedTicket === ticket.ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;
     }
-
+    console.log(indexTicket)
     return (
         <>
             <div className={s.wrapperTitle}>
@@ -132,11 +142,19 @@ function EditTickets() {
             )}
 
             {isEditQuestion && (
-                <EditQuestion selectedTicket={selectedTicket} indexTicket={indexTicket} idSelectedTicket={idSelectedTicket} />
+                <EditQuestion
+                    key={indexTicket}
+                    selectedTicket={selectedTicket}
+                    indexTicket={indexTicket}
+                    idSelectedTicket={idSelectedTicket}
+                    setIsEditQuestion={setIsEditQuestion}
+                    isImg={isImg}
+                    setIsImg={setIsImg}
+                />
             )}
 
             {isAddQuestion && (
-                <AddQuestion idSelectedTicket={idSelectedTicket} lengthTicket={lengthTicket} setLengthTicket={setLengthTicket} />
+                <AddQuestion key={indexTicket} idSelectedTicket={idSelectedTicket} lengthTicket={lengthTicket} setLengthTicket={setLengthTicket} />
             )}
         </>
     );

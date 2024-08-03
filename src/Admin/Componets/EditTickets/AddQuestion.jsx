@@ -1,10 +1,13 @@
 import React from 'react';
 import s from '../../styles/EditTickets/addQuestion.module.css';
+import  logoDeleteImg from '../../../../assets/deleteImg.svg'
 import gif from '../../../../assets/check.gif';
 function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
+    const [imgSrc, setImgSrc] = React.useState(null);
+    const [isImg,setIsImg] = React.useState(false)
     const [inputCount, setInputCount] = React.useState([0, 1]);
     const [isGif, setIsGif] = React.useState(false);
-
+  
     function createInput() {
         if (inputCount.length > 4) return false;
         setInputCount([...inputCount, inputCount[inputCount.length - 1] + 1]); // для key 54 строка
@@ -44,9 +47,28 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
 
     return (
         <form onSubmit={saveQuestion} className={s.wrapper}>
-            <h4 className={s.numberQuestion}>{`Вопрос: ${lengthTicket}`}</h4>
+            <h4 >{`Вопрос: ${lengthTicket}`}</h4>
+            {imgSrc && !isImg ? (
+                        <div className={s.wrapperImg}>
+                            <img className={s.picture} src={imgSrc} alt='' />
+                            <img className={s.logoDeleteImg} onClick={() => setIsImg(true)} src={logoDeleteImg} alt='logoDeleteImg' />
+                        </div>
+                    ) : (
+                        <div className={`${s.withoutPicture} `}>Вопрос без рисунка</div>
+                    )}
 
-            <input className={s.inputFile} type='file' name='img' accept='image/*' />
+            <input className={s.inputFile}
+                onInput={event => {
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = e => {
+                        setImgSrc(e.target.result);
+                    };
+                }}
+                name='img'
+                type='file'
+            />
 
             <div className={s.wrapperInput}>
                 <div className={s.requiredInput}>*</div>

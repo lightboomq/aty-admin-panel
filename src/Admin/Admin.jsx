@@ -8,11 +8,11 @@ import EditTickets from './Componets/EditTickets/EditTickets.jsx';
 
 
 function Admin() {
-    const [isUsers, setIsUsers] = React.useState(true);
+    const [isUsers, setIsUsers] = React.useState(false);
     const [isActiveExam, setIsAcitveExam] = React.useState(false);
     const [isExamPassed, setIsExamPassed] = React.useState(false);
     const [isExamFailed, setIsExamFailed] = React.useState(false);
-    const [isEditTickets, setIsEditTickets] = React.useState(false);
+    const [isEditTickets, setIsEditTickets] = React.useState(true);
 
     function getItemFromMenu(e) {
         if (e.target.tagName !== 'LI') return;

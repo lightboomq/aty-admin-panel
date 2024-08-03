@@ -17,18 +17,17 @@
     justify-content: end;
     width: 100%;
 }
-.inputSeacrhUser{
+.inputSearchUser{
     padding-left: 5px;
+    margin-right: 5px;
 }
-.inputSeacrhUser::placeholder{
-    margin-left: 15px;
-}
+
 .logo{
     width: 32px;
     height: 32px;
     margin-right: 10px;
     cursor: pointer;
-}
+}к
 .higlight{
     
     background: rgba(233, 239, 245, 0.712);
