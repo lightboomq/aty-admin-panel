@@ -2,16 +2,16 @@ import React from 'react';
 import s from './admin.module.css';
 import Header from './Componets/Header.jsx';
 import User from './Componets/Users/User.jsx';
-import ActiveExam from './Componets/ActiveExam.jsx' 
+import ActiveExam from './Componets/ActiveExam.jsx';
+import ExamPassed from './Componets/ExamPassed.jsx';
+import ExamNotPassed from './Componets/ExamNotPassed.jsx';
 import EditTickets from './Componets/EditTickets/EditTickets.jsx';
-
-
 
 function Admin() {
     const [isUsers, setIsUsers] = React.useState(false);
     const [isActiveExam, setIsAcitveExam] = React.useState(false);
     const [isExamPassed, setIsExamPassed] = React.useState(false);
-    const [isExamFailed, setIsExamFailed] = React.useState(false);
+    const [isExamNotPassed, setIsExamNotPassed] = React.useState(false);
     const [isEditTickets, setIsEditTickets] = React.useState(true);
 
     function getItemFromMenu(e) {
@@ -24,7 +24,7 @@ function Admin() {
                 setIsUsers(true);
                 setIsAcitveExam(false);
                 setIsExamPassed(false);
-                setIsExamFailed(false);
+                setIsExamNotPassed(false);
                 setIsEditTickets(false);
                 break;
 
@@ -32,7 +32,7 @@ function Admin() {
                 setIsUsers(false);
                 setIsAcitveExam(true);
                 setIsExamPassed(false);
-                setIsExamFailed(false);
+                setIsExamNotPassed(false);
                 setIsEditTickets(false);
                 break;
 
@@ -40,7 +40,7 @@ function Admin() {
                 setIsUsers(false);
                 setIsAcitveExam(false);
                 setIsExamPassed(true);
-                setIsExamFailed(false);
+                setIsExamNotPassed(false);
                 setIsEditTickets(false);
                 break;
 
@@ -48,7 +48,7 @@ function Admin() {
                 setIsUsers(false);
                 setIsAcitveExam(false);
                 setIsExamPassed(false);
-                setIsExamFailed(true);
+                setIsExamNotPassed(true);
                 setIsEditTickets(false);
                 break;
 
@@ -56,7 +56,7 @@ function Admin() {
                 setIsUsers(false);
                 setIsAcitveExam(false);
                 setIsExamPassed(false);
-                setIsExamFailed(false);
+                setIsExamNotPassed(false);
                 setIsEditTickets(true);
                 break;
 
@@ -79,7 +79,7 @@ function Admin() {
                 <li className={`${s.menuItem} ${isExamPassed && s.activeItem}`} value='exam-passed'>
                     Экзамен сдали
                 </li>
-                <li className={`${s.menuItem} ${isExamFailed && s.activeItem}`} value='exam-failed'>
+                <li className={`${s.menuItem} ${isExamNotPassed && s.activeItem}`} value='exam-failed'>
                     Экзамен не сдали
                 </li>
                 <li className={`${s.menuItem} ${isEditTickets && s.activeItem}`} value='editor-tickets'>
@@ -92,10 +92,22 @@ function Admin() {
                     <User />
                 </div>
             )}
-            
+
             {isActiveExam && (
                 <div className={s.content}>
                     <ActiveExam />
+                </div>
+            )}
+
+            {isExamPassed && (
+                <div className={s.content}>
+                    <ExamPassed />
+                </div>
+            )}
+
+            {isExamNotPassed && (
+                <div className={s.content}>
+                    <ExamNotPassed />
                 </div>
             )}
 

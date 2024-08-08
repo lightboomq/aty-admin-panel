@@ -21,11 +21,8 @@ function EditTickets() {
     const [isAddQuestion, setIsAddQuestion] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState('Выберите операцию');
 
-   
     const [isImg, setIsImg] = React.useState(false);
 
-
-    
     React.useEffect(() => {
         async function getTickets() {
             const response = await fetch('http://147.45.159.11/api/ticketEditor/tickets', {
@@ -63,7 +60,7 @@ function EditTickets() {
         setIsTagSelect(true);
         setLengthTicket(jsonTicket.length + 1);
     }
- 
+
     function getSelect() {
         const select = selectRef.current.value;
         const number = Number.parseInt(select.match(/\d+/));
@@ -74,7 +71,7 @@ function EditTickets() {
                 setIsAddQuestion(false);
                 setIndexTicket(number - 1);
                 setSelectedValue('Выберите операцию');
-                setIsImg(false)
+                setIsImg(false);
                 break;
 
             case 'addQuestion':
@@ -82,25 +79,31 @@ function EditTickets() {
                 setIsAddQuestion(true);
                 setIndexTicket(number - 1);
                 setSelectedValue('Добавить вопрос в билет');
-                setIsImg(false)
+                setIsImg(false);
                 break;
 
-            case 'deleteTicket':
+            case 'deleteTicket': {
                 DeleteTicket(idSelectedTicket);
                 setSelectedValue('Выберите операцию');
-                setIsImg(false)
+                setIsImg(false);
+                setIsTagSelect(false)
+                setIsAddQuestion(false);
+                setIsEditQuestion(false);
+                const copy = [...allTickets];
+                copy.splice(indexTicket, 1);
+                setAllTickets(copy);
                 break;
+            }
             default:
                 break;
         }
     }
 
-  
     function highlight(ticket, idSelectedTicket) {
         if (idSelectedTicket === ticket.ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;
     }
-    console.log(indexTicket)
+
     return (
         <>
             <div className={s.wrapperTitle}>
@@ -121,7 +124,7 @@ function EditTickets() {
                         </div>
                     );
                 })}
-                <CreateTicket />
+                <CreateTicket setAllTickets={setAllTickets} />
             </div>
 
             {isTagSelect && (
@@ -144,6 +147,7 @@ function EditTickets() {
             {isEditQuestion && (
                 <EditQuestion
                     key={indexTicket}
+                    setAllTickets={setAllTickets}
                     selectedTicket={selectedTicket}
                     indexTicket={indexTicket}
                     idSelectedTicket={idSelectedTicket}
@@ -154,7 +158,12 @@ function EditTickets() {
             )}
 
             {isAddQuestion && (
-                <AddQuestion key={indexTicket} idSelectedTicket={idSelectedTicket} lengthTicket={lengthTicket} setLengthTicket={setLengthTicket} />
+                <AddQuestion
+                    key={indexTicket}
+                    idSelectedTicket={idSelectedTicket}
+                    lengthTicket={lengthTicket}
+                    setLengthTicket={setLengthTicket}
+                />
             )}
         </>
     );

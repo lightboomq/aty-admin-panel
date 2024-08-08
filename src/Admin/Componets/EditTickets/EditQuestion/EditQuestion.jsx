@@ -7,10 +7,9 @@ import InputHelp from './InputHelp.jsx';
 import s from './editQuestion.module.css';
 import DeleteQuestion from './DeleteQuestion.jsx';
 
-function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, setIsImg }) {
+function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, setIsImg, setAllTickets }) {
     const [imgSrc, setImgSrc] = React.useState(selectedTicket[indexTicket].img);
     const [isGif, setIsGif] = React.useState(false);
-    console.log(isImg);
     const correctAnswer = selectedTicket[indexTicket].answers.findIndex(obj => obj.isCorrect === true);
     const token = localStorage.getItem('token');
     const ref = React.useRef(null);
@@ -56,7 +55,7 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
                             <img className={s.logoDeleteImg} onClick={getClearInputFile} src={logoDeleteImg} alt='logoDeleteImg' />
                         </div>
                     ) : (
-                        <div className={`${s.withoutPicture} `} >Вопрос без рисунка</div>
+                        <div className={`${s.withoutPicture} `}>Вопрос без рисунка</div>
                     )}
 
                     <input
@@ -100,7 +99,7 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
                         {isGif && <img className={s.gif} src={gif} alt='gif' />}
                     </div>
 
-                    <DeleteQuestion idSelectedTicket={idSelectedTicket} questionId={selectedTicket[indexTicket].questionId} />
+                    <DeleteQuestion setAllTickets={setAllTickets} idSelectedTicket={idSelectedTicket} questionId={selectedTicket[indexTicket].questionId} />
                 </div>
             </form>
         </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import s from '../../styles/users.module.css';
 import DeleteUser from './DeleteUser.jsx';
 import SetExamUser from './SetExamUser.jsx';
-import GetResultUser from './GetResultUser.jsx';
 import logo from '../../../../assets/arrow.svg';
 import logoSearch from '../../../../assets/searchUser.svg';
 function RenderUser({ users, department }) {
@@ -39,17 +38,18 @@ function RenderUser({ users, department }) {
 
             {isOpen &&
                 userFound.map((user, i) => {
+                    console.log(user.isAppointExam)
                     return (
                         <div key={user.email} className={highlightUser(i)}>
                             {i + 1}
                             {'.'} {user.firstName} {user.secondName}
                             <div>
-                                <GetResultUser email={user.email} />
-                                <SetExamUser
+                                
+                                {!user.isAppointExam && <SetExamUser
                                     email={user.email}
                                     isAppointExam={user.isAppointExam}
                                     userName={`${user.firstName} ${user.secondName}`}
-                                />
+                                />} 
                                 <DeleteUser email={user.email} gender={user.secondName} userName={`${user.firstName} ${user.secondName}`} />
                             </div>
                         </div>
