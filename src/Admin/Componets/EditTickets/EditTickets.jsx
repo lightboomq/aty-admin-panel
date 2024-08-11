@@ -99,6 +99,9 @@ function EditTickets() {
         }
     }
 
+
+  const [activeTab,setActiveTab] = React.useState('')
+
     function highlight(ticket, idSelectedTicket) {
         if (idSelectedTicket === ticket.ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;

@@ -6,6 +6,7 @@ function ActiveExam() {
     const [users, setUsers] = React.useState([]);
     const [err, setErr] = React.useState('');
 
+    console.log(users)
     React.useEffect(() => {
         async function getUsers() {
             const token = localStorage.getItem('token');
@@ -50,6 +51,7 @@ function ActiveExam() {
                                 email={user.email}
                                 isAppointExam={user.isAppointExam}
                                 userName={`${user.firstName} ${user.secondName}`}
+                                setUsers={setUsers}
                             />
                         </div>
                     );

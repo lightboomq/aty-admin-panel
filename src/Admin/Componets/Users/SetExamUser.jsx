@@ -1,12 +1,24 @@
 import React from 'react';
 import s from '../../styles/users.module.css';
 import logo from '../../../../assets/exam.svg';
-function SetExamUser({ email, userName, isAppointExam }) {
+function SetExamUser({ email, userName, isAppointExam, setUsers }) {
     async function exam() {
         const action = confirm(isAppointExam ? `Отменить экзамен ${userName}?` : `Назначить экзамен ${userName}?`);
-        if (!action) return;
         const token = localStorage.getItem('token');
-        
+
+        if (!action) {
+            const res = await fetch('http://147.45.159.11/api/userEditor/getUsersWithAppointExam', {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const userJson = await res.json();
+            setUsers(userJson);
+
+            return;
+        }
+
         await fetch('http://147.45.159.11/api/userEditor/appoint', {
             method: 'POST',
             headers: {

@@ -8,110 +8,61 @@ import ExamNotPassed from './Componets/ExamNotPassed.jsx';
 import EditTickets from './Componets/EditTickets/EditTickets.jsx';
 
 function Admin() {
-    const [isUsers, setIsUsers] = React.useState(false);
-    const [isActiveExam, setIsAcitveExam] = React.useState(false);
-    const [isExamPassed, setIsExamPassed] = React.useState(false);
-    const [isExamNotPassed, setIsExamNotPassed] = React.useState(false);
-    const [isEditTickets, setIsEditTickets] = React.useState(true);
-
-    function getItemFromMenu(e) {
-        if (e.target.tagName !== 'LI') return;
-
-        const item = e.target.getAttribute('value');
-
-        switch (item) {
-            case 'users':
-                setIsUsers(true);
-                setIsAcitveExam(false);
-                setIsExamPassed(false);
-                setIsExamNotPassed(false);
-                setIsEditTickets(false);
-                break;
-
-            case 'exam-active':
-                setIsUsers(false);
-                setIsAcitveExam(true);
-                setIsExamPassed(false);
-                setIsExamNotPassed(false);
-                setIsEditTickets(false);
-                break;
-
-            case 'exam-passed':
-                setIsUsers(false);
-                setIsAcitveExam(false);
-                setIsExamPassed(true);
-                setIsExamNotPassed(false);
-                setIsEditTickets(false);
-                break;
-
-            case 'exam-failed':
-                setIsUsers(false);
-                setIsAcitveExam(false);
-                setIsExamPassed(false);
-                setIsExamNotPassed(true);
-                setIsEditTickets(false);
-                break;
-
-            case 'editor-tickets':
-                setIsUsers(false);
-                setIsAcitveExam(false);
-                setIsExamPassed(false);
-                setIsExamNotPassed(false);
-                setIsEditTickets(true);
-                break;
-
-            default:
-                break;
-        }
-    }
+    const [aciveTab, setActiveTab] = React.useState('users');
 
     return (
         <div className={s.wrapper}>
             <Header />
 
-            <ol onClick={getItemFromMenu} className={s.wrapperMenu}>
-                <li className={`${s.menuItem} ${isUsers && s.activeItem}`} value='users'>
+            <ol className={s.wrapperMenu}>
+                <li className={`${s.menuItem} ${aciveTab === 'users' && s.activeItem}`} onClick={() => setActiveTab('users')}>
                     Пользователи
                 </li>
-                <li className={`${s.menuItem} ${isActiveExam && s.activeItem}`} value='exam-active'>
+                <li className={`${s.menuItem} ${aciveTab === 'activeExam' && s.activeItem}`} onClick={() => setActiveTab('activeExam')}>
                     Назначен экзамен
                 </li>
-                <li className={`${s.menuItem} ${isExamPassed && s.activeItem}`} value='exam-passed'>
+                <li className={`${s.menuItem} ${aciveTab === 'examPassed' && s.activeItem}`} onClick={() => setActiveTab('examPassed')}>
                     Экзамен сдали
                 </li>
-                <li className={`${s.menuItem} ${isExamNotPassed && s.activeItem}`} value='exam-failed'>
+                <li
+                    className={`${s.menuItem} ${aciveTab === 'examNotPassed' && s.activeItem}`}
+                    onClick={() => setActiveTab('examNotPassed')}
+                >
                     Экзамен не сдали
                 </li>
-                <li className={`${s.menuItem} ${isEditTickets && s.activeItem}`} value='editor-tickets'>
+                <li
+                    className={`${s.menuItem} ${aciveTab === 'editorTickets' && s.activeItem}`}
+                    onClick={() => setActiveTab('editorTickets')}
+                >
                     Редактор билетов
                 </li>
             </ol>
 
-            {isUsers && (
+            {aciveTab === 'users' && (
                 <div className={s.content}>
                     <User />
                 </div>
             )}
 
-            {isActiveExam && (
+            {aciveTab === 'activeExam' && (
                 <div className={s.content}>
                     <ActiveExam />
                 </div>
             )}
 
-            {isExamPassed && (
+            {aciveTab === 'examPassed' && (
                 <div className={s.content}>
                     <ExamPassed />
                 </div>
             )}
 
-            {isExamNotPassed && (
+            {aciveTab === 'examNotPassed' && (
                 <div className={s.content}>
                     <ExamNotPassed />
                 </div>
             )}
 
-            {isEditTickets && (
+            {aciveTab === 'editorTickets' && (
                 <div className={s.content}>
                     <EditTickets />
                 </div>
