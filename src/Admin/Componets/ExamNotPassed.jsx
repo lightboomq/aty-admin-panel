@@ -44,7 +44,7 @@ function ExamNotPassed() {
         return s.user;
     }
     return (
-        <div>
+        <div className={s.test}>
             <div className={s.wrapperTitle}>
                 <img src={logoUsers} alt='users' />
                 <h3 style={{ marginLeft: '10px' }}>Пользователи</h3>

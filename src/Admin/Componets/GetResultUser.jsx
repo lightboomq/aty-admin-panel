@@ -25,7 +25,7 @@ function GetResultUser({ email }) {
         setIsOpen(true);
     }
 
-    console.log(user);
+    
 
     function setHighlightAnswers (correctAnswer, userAnswer, i) {
         if (i === correctAnswer && i === userAnswer) return '(Эталон) (Ваш ответ)';

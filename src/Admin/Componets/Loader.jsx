@@ -1,7 +1,9 @@
 import React from 'react';
 import s from '../styles/loader.module.css';
-function Loader() {
-    return <span className={s.loader}>{}</span>;
+
+function Loader({classNameLoader, classNameBorder}) {
+    
+    return <span className={ `${s[classNameLoader]} ${s[classNameBorder]}`}>{}</span>;
 }
 
 export default Loader;

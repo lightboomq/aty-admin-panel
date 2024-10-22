@@ -2,10 +2,10 @@ import React from 'react';
 import s from '../../styles/EditTickets/editTickets.module.css';
 import logoEdit from '../../../../assets/editTicket.svg';
 import Loader from '../Loader.jsx';
-import CreateTicket from './CreateEmptyTicket.jsx';
+import CreateEmptyTicket from './CreateEmptyTicket.jsx';
 import EditQuestion from './EditQuestion/EditQuestion.jsx';
 import AddQuestion from './AddQuestion.jsx';
-import DeleteTicket from './DeleteTicket.js';
+import DeleteTicket from './DeleteTicket.jsx';
 
 function EditTickets() {
     const token = localStorage.getItem('token');
@@ -15,13 +15,11 @@ function EditTickets() {
     const [lengthTicket, setLengthTicket] = React.useState(null);
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
     const [indexTicket, setIndexTicket] = React.useState(null);
+    const [selectedOption, setSelectedOption] = React.useState('');
+    const [numberQuestion, setNumberQuestion] = React.useState(null);
+    const [selectedQuestion, setSelectedQuestion] = React.useState({});
     const [isLoading, setIsLoading] = React.useState(false);
     const [isTagSelect, setIsTagSelect] = React.useState(false);
-    const [isEditQuestion, setIsEditQuestion] = React.useState(false);
-    const [isAddQuestion, setIsAddQuestion] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState('Выберите операцию');
-
-    const [isImg, setIsImg] = React.useState(false);
 
     React.useEffect(() => {
         async function getTickets() {
@@ -32,6 +30,7 @@ function EditTickets() {
                 },
             });
             const jsonAllTickets = await response.json();
+
             setAllTickets(jsonAllTickets);
         }
         getTickets();
@@ -42,7 +41,7 @@ function EditTickets() {
         setIndexTicket(Number(e.target.textContent) - 1);
         setIsLoading(true);
         setIsTagSelect(false);
-        setIsEditQuestion(false);
+        setSelectedOption('');
         const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
             method: 'POST',
             headers: {
@@ -62,36 +61,18 @@ function EditTickets() {
     }
 
     function getSelect() {
-        const select = selectRef.current.value;
-        const number = Number.parseInt(select.match(/\d+/));
+        const string = selectRef.current.value;
+        const numberQuestion = string.length === 16 ? string[15] : string[15] + string[16];
 
-        switch (select) {
-            case `changeQuestion ${number}`:
-                setIsEditQuestion(true);
-                setIsAddQuestion(false);
-                setIndexTicket(number - 1);
-                setSelectedValue('Выберите операцию');
-                setIsImg(false);
+        switch (string) {
+            case `changeQuestion ${numberQuestion}`: {
+                setSelectedOption('changeQuestion');
+                setNumberQuestion(numberQuestion - 1);
+                setSelectedQuestion(selectedTicket[numberQuestion - 1]);
                 break;
-
-            case 'addQuestion':
-                setIsEditQuestion(false);
-                setIsAddQuestion(true);
-                setIndexTicket(number - 1);
-                setSelectedValue('Добавить вопрос в билет');
-                setIsImg(false);
-                break;
-
-            case 'deleteTicket': {
-                DeleteTicket(idSelectedTicket);
-                setSelectedValue('Выберите операцию');
-                setIsImg(false);
-                setIsTagSelect(false)
-                setIsAddQuestion(false);
-                setIsEditQuestion(false);
-                const copy = [...allTickets];
-                copy.splice(indexTicket, 1);
-                setAllTickets(copy);
+            }
+            case 'addQuestion': {
+                setSelectedOption('addQuestion');
                 break;
             }
             default:
@@ -99,11 +80,8 @@ function EditTickets() {
         }
     }
 
-
-  const [activeTab,setActiveTab] = React.useState('')
-
-    function highlight(ticket, idSelectedTicket) {
-        if (idSelectedTicket === ticket.ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
+    function highlight(ticketId, idSelectedTicket) {
+        if (idSelectedTicket === ticketId && isTagSelect) return `${s.ticketCard} ${s.ticketCardActive}`;
         return s.ticketCard;
     }
 
@@ -114,53 +92,52 @@ function EditTickets() {
                 <h3 style={{ marginLeft: '10px' }}>Редактировать билет</h3>
             </div>
             <div className={s.wrapper}>
-                {allTickets.map((ticket, i) => {
+                {allTickets.map((ticketId, i) => {
                     return (
-                        <div
-                            key={ticket.ticketId}
-                            onClick={getTicket}
-                            ticketid={ticket.ticketId}
-                            className={highlight(ticket, idSelectedTicket)}
-                        >
+                        <div key={ticketId} onClick={getTicket} ticketid={ticketId} className={highlight(ticketId, idSelectedTicket)}>
                             {i + 1}
-                            {i === indexTicket && isLoading ? <Loader /> : ''}
+                            {i === indexTicket && isLoading ? <Loader classNameLoader='loader' classNameBorder='green' /> : ''}
                         </div>
                     );
                 })}
-                <CreateTicket setAllTickets={setAllTickets} />
+                <CreateEmptyTicket setAllTickets={setAllTickets} />
             </div>
 
             {isTagSelect && (
-                <div>
+                <div style={{display:'flex'}}>
                     <select ref={selectRef} onChange={getSelect}>
                         <option hidden value=''>
-                            {selectedValue}
+                            Выберите операцию
                         </option>
 
                         {selectedTicket.map((number, i) => {
                             return <option key={number.questionId} value={`changeQuestion ${i + 1}`}>{`Изменить вопрос: ${i + 1}`}</option>;
                         })}
 
-                        {selectedValue !== 'Добавить вопрос в билет' && <option value='addQuestion'>Добавить вопрос в билет </option>}
-                        <option value='deleteTicket'>Удалить билет </option>
+                        <option value='addQuestion'>Добавить вопрос в билет </option>
+                        
                     </select>
+                    <DeleteTicket
+                        allTickets={allTickets}
+                        setAllTickets={setAllTickets}
+                        idSelectedTicket={idSelectedTicket}
+                        indexTicket={indexTicket}
+                        setIsTagSelect={setIsTagSelect}
+                        setSelectedOption={setSelectedOption}
+                    />
                 </div>
             )}
 
-            {isEditQuestion && (
+            {selectedOption === 'changeQuestion' && (
                 <EditQuestion
-                    key={indexTicket}
+                    key={numberQuestion}
                     setAllTickets={setAllTickets}
-                    selectedTicket={selectedTicket}
-                    indexTicket={indexTicket}
                     idSelectedTicket={idSelectedTicket}
-                    setIsEditQuestion={setIsEditQuestion}
-                    isImg={isImg}
-                    setIsImg={setIsImg}
+                    selectedQuestion={selectedQuestion}
                 />
             )}
 
-            {isAddQuestion && (
+            {selectedOption === 'addQuestion' && (
                 <AddQuestion
                     key={indexTicket}
                     idSelectedTicket={idSelectedTicket}

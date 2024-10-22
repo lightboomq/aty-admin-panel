@@ -2,11 +2,12 @@ import React from 'react';
 import s from '../styles/examsUser.module.css';
 import logoUsers from '../../../assets/users.svg';
 import SetExamUser from './Users/SetExamUser';
+
 function ActiveExam() {
     const [users, setUsers] = React.useState([]);
     const [err, setErr] = React.useState('');
 
-    console.log(users)
+    
     React.useEffect(() => {
         async function getUsers() {
             const token = localStorage.getItem('token');

@@ -19,7 +19,7 @@ function ExamPassed() {
                 body: JSON.stringify({ isPassExam: true }),
             });
             const userJson = await res.json();
-            console.log(userJson);
+            
             setUsers(userJson);
         }
         getUsers();
@@ -42,7 +42,7 @@ function ExamPassed() {
         return s.user;
     }
     return (
-        <div>
+        <div >
             <div className={s.wrapperTitle}>
                 <img src={logoUsers} alt='users' />
                 <h3 style={{ marginLeft: '10px' }}>Пользователи</h3>

@@ -8,7 +8,7 @@ import ExamNotPassed from './Componets/ExamNotPassed.jsx';
 import EditTickets from './Componets/EditTickets/EditTickets.jsx';
 
 function Admin() {
-    const [aciveTab, setActiveTab] = React.useState('users');
+    const [aciveTab, setActiveTab] = React.useState('editorTickets');
 
     return (
         <div className={s.wrapper}>

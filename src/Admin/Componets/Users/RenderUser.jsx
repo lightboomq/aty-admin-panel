@@ -38,7 +38,7 @@ function RenderUser({ users, department }) {
 
             {isOpen &&
                 userFound.map((user, i) => {
-                    console.log(user.isAppointExam)
+                    
                     return (
                         <div key={user.email} className={highlightUser(i)}>
                             {i + 1}
@@ -50,7 +50,7 @@ function RenderUser({ users, department }) {
                                     isAppointExam={user.isAppointExam}
                                     userName={`${user.firstName} ${user.secondName}`}
                                 />} 
-                                <DeleteUser email={user.email} gender={user.secondName} userName={`${user.firstName} ${user.secondName}`} />
+                                <DeleteUser email={user.email} gender={user.secondName} userName={`${user.firstName} ${user.secondName}`} indexUser = {i}/>
                             </div>
                         </div>
                     );

@@ -9,7 +9,15 @@
   box-sizing: border-box;
   animation: rotation 2s linear infinite;
 }
-
+.green{
+  border: 5px dotted green;
+}
+.red{
+  border: 5px dotted brown;
+}
+.blue{
+  border: 5px dotted rgb(7, 33, 90);
+}
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

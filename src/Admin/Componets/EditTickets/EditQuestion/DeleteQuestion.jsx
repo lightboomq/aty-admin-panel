@@ -1,6 +1,7 @@
 import React from 'react';
 import s from './editQuestion.module.css';
 import gif from '../../../../../assets/check.gif';
+
 function DeleteQuestion({ idSelectedTicket, questionId }) {
     const [isGif, setIsGif] = React.useState(false);
     const token = localStorage.getItem('token');

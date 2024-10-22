@@ -1,7 +1,8 @@
 import React from 'react';
 import s from '../../styles/EditTickets/addQuestion.module.css';
-import  logoDeleteImg from '../../../../assets/deleteImg.svg'
+import logoDeleteImg from '../../../../assets/deleteImg.svg'
 import gif from '../../../../assets/check.gif';
+
 function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
     const [imgSrc, setImgSrc] = React.useState(null);
     const [isImg,setIsImg] = React.useState(false)
@@ -18,8 +19,9 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
         const updateState = inputCount.slice(0, inputCount.length - 1);
         setInputCount(updateState);
     }
-    console.log(err)
+    
     async function saveQuestion(e) {
+        console.log(true)
         e.preventDefault();
         const token = localStorage.getItem('token');
         const form = new FormData(e.target);

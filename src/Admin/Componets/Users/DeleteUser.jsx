@@ -2,12 +2,12 @@ import React from 'react';
 import logoMan from '../../../../assets/man.png';
 import logoWoman from '../../../../assets/woman.png';
 import s from '../../styles/users.module.css';
+import UserStorage from '../../../store/UserStorage.js';
 
 function DeleteUser({ email, userName, gender }) {
-
     async function deleteUser() {
-        const action = confirm(`Удалить пользователя ${userName} из базы данных? Все данные будут удалены безвозвратно`);
-        if (!action) return;
+        const isConfirm = confirm(`Удалить пользователя ${userName} из базы данных? Все данные будут удалены безвозвратно`);
+        if (!isConfirm) return;
 
         const token = localStorage.getItem('token');
 
@@ -21,6 +21,7 @@ function DeleteUser({ email, userName, gender }) {
                 email: email,
             }),
         });
+        UserStorage.deleteUser(email);
     }
 
     return <img onClick={deleteUser} className={s.logo} alt='logoDelete' src={gender[gender.length - 1] === 'а' ? logoWoman : logoMan} />;

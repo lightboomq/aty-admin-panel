@@ -7,10 +7,12 @@ import InputHelp from './InputHelp.jsx';
 import s from './editQuestion.module.css';
 import DeleteQuestion from './DeleteQuestion.jsx';
 
-function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, setIsImg, setAllTickets }) {
-    const [imgSrc, setImgSrc] = React.useState(selectedTicket[indexTicket].img);
+function EditQuestion({ selectedQuestion, idSelectedTicket, setAllTickets }) {
+ 
+    const [isImg, setIsImg] = React.useState(false);
+    const [imgSrc, setImgSrc] = React.useState(selectedQuestion.img);
     const [isGif, setIsGif] = React.useState(false);
-    const correctAnswer = selectedTicket[indexTicket].answers.findIndex(obj => obj.isCorrect === true);
+    const correctAnswer = selectedQuestion.answers.findIndex(obj => obj.isCorrect === true);
     const token = localStorage.getItem('token');
     const ref = React.useRef(null);
 
@@ -21,7 +23,7 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
         if (isImg) formData.delete('img');
 
         formData.append('ticketId', idSelectedTicket);
-        formData.append('questionId', selectedTicket[indexTicket].questionId);
+        formData.append('questionId', selectedQuestion.questionId);
 
         const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
             method: 'PATCH',
@@ -48,7 +50,7 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
     return (
         <div className={s.wrapper}>
             <form onSubmit={saveTicket}>
-                <div key={selectedTicket[indexTicket].questionId}>
+                <div key={selectedQuestion.questionId}>
                     {imgSrc ? (
                         <div className={s.wrapperImg}>
                             <img className={s.picture} src={imgSrc} alt='Обновите страницу' />
@@ -72,10 +74,10 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
                         type='file'
                     />
 
-                    <InputQuestion question={selectedTicket[indexTicket].question} />
+                    <InputQuestion question={selectedQuestion.question} />
 
                     <div>
-                        {selectedTicket[indexTicket].answers.map((answer, i) => {
+                        {selectedQuestion.answers.map((answer, i) => {
                             return (
                                 <InputAnswer
                                     key={`${answer}${i + 1}`}
@@ -88,7 +90,7 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
                         })}
                     </div>
 
-                    <InputHelp helpText={selectedTicket[indexTicket].help} />
+                    <InputHelp helpText={selectedQuestion.help} />
                 </div>
 
                 <div className={s.wrapperBtns}>
@@ -99,7 +101,11 @@ function EditQuestion({ selectedTicket, indexTicket, idSelectedTicket, isImg, se
                         {isGif && <img className={s.gif} src={gif} alt='gif' />}
                     </div>
 
-                    <DeleteQuestion setAllTickets={setAllTickets} idSelectedTicket={idSelectedTicket} questionId={selectedTicket[indexTicket].questionId} />
+                    <DeleteQuestion
+                        setAllTickets={setAllTickets}
+                        idSelectedTicket={idSelectedTicket}
+                        questionId={selectedQuestion.questionId}
+                    />
                 </div>
             </form>
         </div>

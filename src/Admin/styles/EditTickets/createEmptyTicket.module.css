@@ -6,12 +6,13 @@
     border: 3px solid rgb(7, 33, 90);
     width: 40px;
     height: 40px;
+    cursor: pointer;
+    background-color: white;
   }
 .plus{
     font-size: 1.8em;
     font-weight: 200;
     color: rgb(7, 33, 90);
-    cursor: pointer;
 }
 .wrapper:active{
     transform: translateY(-3px);
