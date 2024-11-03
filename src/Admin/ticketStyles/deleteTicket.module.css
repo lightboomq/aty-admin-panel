@@ -1,0 +1,28 @@
+.wrapper{
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  border-radius: 10px;
+  border: 3px solid brown;
+  width: 40px;
+  height: 35px;
+  cursor: pointer;
+  background-color: white;
+  margin: 10px 10px;
+  color: brown;
+  font-weight: 600;
+}
+
+.line{
+  position: absolute;
+  width: 43px;
+  height: 1px;
+  background-color: brown;
+}
+.degMinus{
+  transform: rotate(-44deg);
+}
+.degPlus{
+  transform: rotate(44deg); 
+}

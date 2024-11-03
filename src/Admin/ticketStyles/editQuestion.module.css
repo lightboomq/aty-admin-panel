@@ -1,0 +1,80 @@
+
+.wrapper{
+    margin:15px 0px 0px 40px;
+    max-width:804px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+    padding: 15px;
+
+}
+.picture{
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+.withoutPicture{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: clamp(130px, 35vw, 250px);
+    font-size: clamp(25px, 8vw, 50px); 
+}
+
+.wrapperImg{
+    position: relative;
+}
+.logoDeleteImg{
+    cursor: pointer;   
+    position: absolute;
+    top: 5px;  
+    right: 0;
+}
+.help{
+    margin-top: 10px;
+}
+.textarea{
+    overflow: hidden;
+    resize: vertical;
+    border: 1px solid;
+    padding-left: 5px;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    background-color: white;
+    margin-top: 15px;
+}
+
+.wrapperInput{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+.inputAnswer{
+    width: 100%;
+    height: 35px;
+    padding-left: 5px;
+}
+.radioBtn{
+    margin-left:5px
+}
+.wrapperBtns{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    height: 40px;
+}
+
+.gif{
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+}
+.btn{
+    cursor: pointer;
+}
+
+

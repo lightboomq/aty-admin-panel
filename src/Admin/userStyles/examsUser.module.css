@@ -1,0 +1,27 @@
+.wrapperTitle{
+    display: flex;
+    align-items: center;
+}
+.user{
+    display: flex;
+    margin-top: 10px;
+    margin-left: 42px;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    background: rgba(221, 224, 224, 0.26);
+}
+.wrapperInfo{
+    display: flex;
+    align-items: center;
+}
+.higlight{
+    background: rgba(233, 239, 245, 0.712);
+}
+.err{
+    margin:10px 0px 0px 10px;
+    color: red;
+}
+.logo{
+    cursor: pointer;
+}
