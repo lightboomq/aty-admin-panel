@@ -38,7 +38,7 @@ function ExamPassed() {
                             {'.'} {user.firstName} {user.secondName}
                             <p style={{ marginLeft: '10px' }}>{getDate(user.passAt)}</p>
                         </div>
-                        <GetResultUser email={user.email} />
+                        <GetResultUser email={user.email} userName={`${user.firstName} ${user.secondName}`}/>
                     </div>
                 );
             })}

@@ -1,8 +1,8 @@
 import React from 'react';
 import GetResultUser from './GetResultUser.jsx';
 import logoUsers from '../../../assets/users.svg';
-import s from '../userStyles/examsUser.module.css';
 import UserStorage from '../../store/UserStorage.js';
+import s from '../userStyles/examsUser.module.css';
 
 function ExamNotPassed() {
     const users = UserStorage.getExamNotPassedUsers();
@@ -39,9 +39,8 @@ function ExamNotPassed() {
                             {'.'} {user.firstName} {user.secondName}
                             <p style={{ marginLeft: '10px' }}>{getDate(user.passAt)}</p>
                         </div>
-                        <div>
-                            <GetResultUser email={user.email} />
-                        </div>
+
+                        <GetResultUser email={user.email} userName={`${user.firstName} ${user.secondName}`} testResult='Экзамен не сдан' />
                     </div>
                 );
             })}

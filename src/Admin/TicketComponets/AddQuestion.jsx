@@ -21,7 +21,6 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
     }
 
     async function saveQuestion(e) {
-        console.log(true);
         e.preventDefault();
         const token = localStorage.getItem('token');
         const form = new FormData(e.target);

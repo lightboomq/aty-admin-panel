@@ -1,45 +1,37 @@
 import React from 'react';
 import logo from '../../../assets/resultExamUser.svg';
 import logoClose from '../../../assets/deleteImg.svg';
+import Loader from '../layout/Loader.jsx';
+import {userRequests} from '../../API.js';
 import s from '../userStyles/getResultUser.module.css';
 
-function GetResultUser({ email }) {
+function GetResultUser({ email, userName, testResult }) {
     const [questions, setQuestions] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
-
-    async function resultExam() {
-        const token = localStorage.getItem('token');
-
-        const res = await fetch('http://147.45.159.11/api/userEditor/getExamResult', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-                email: email,
-            }),
-        });
-        const jsonQuestions = await res.json();
-
-        setQuestions(jsonQuestions);
-        setIsOpen(true);
-    }
-
+    const [isLoader, setIsLoader] = React.useState(false);
+  
     function setHighlightAnswers(correctAnswer, userAnswer, i) {
-        if (i === correctAnswer && i === userAnswer) return '(Эталон) (Ваш ответ)';
-        if (i === correctAnswer) return '(Эталон)';
-        if (i === userAnswer) return '(Ваш ответ)';
+        if (i === correctAnswer && i === userAnswer) return <span className={s.green}>(Эталон) (Ваш ответ)</span>;
+        if (i === correctAnswer) return <span className={s.green}>(Эталон)</span>;
+        if (i === userAnswer) return <span className={s.red}>(Ваш ответ)</span>;
         return '';
     }
 
     return (
         <>
-            <img src={logo} onClick={resultExam} className={s.logo} alt='resultExam' />
+            <div className={s.wrapperLogoShowResult}>
+                {isLoader && <Loader color='blue' />}
+                <img src={logo} onClick={()=>userRequests.getResultTestUser(email,setIsLoader,setIsOpen, setQuestions)} style={{ cursor: 'pointer', marginLeft: '3px' }} alt='resultExam' />
+            </div>
+
             {isOpen && (
                 <div className={s.wrapper}>
                     <div className={s.userExamResult}>
-                        <img style={{ cursor: 'pointer' }} src={logoClose} onClick={() => setIsOpen(false)} alt='close' />
+                        <div className={s.wrapperLogoClose}>
+                            <img className={s.logoClose} src={logoClose} onClick={() => setIsOpen(false)} alt='close' />
+                        </div>
+                        <h3 className={s.testResult}>{testResult}</h3>
+                        <h3 className={s.userName}>{userName}</h3>
 
                         {questions.map(question => {
                             const correctAnswer = question.answers.findIndex(answer => answer.isCorrect === true);
@@ -47,14 +39,19 @@ function GetResultUser({ email }) {
 
                             return (
                                 <div key={question.questionId} className={s.wrapperQuestion}>
-                                    <div className={s.withoutPicture}>Вопрос без рисунка</div>
-                                    <h3>{question.question}</h3>
+                                    {question.img ? (
+                                        <img src={question.img} alt='img' />
+                                    ) : (
+                                        <div className={s.withoutPicture}>Вопрос без рисунка</div>
+                                    )}
 
-                                    <ol>
+                                    <h3 className={s.questionText}>{question.question}</h3>
+
+                                    <ol className={s.wrapperAnswers}>
                                         {question.answers.map((answer, i) => {
                                             return (
-                                                <li key={answer.answerId}>
-                                                    {answer.answerText} <span>{setHighlightAnswers(correctAnswer, userAnswer, i)}</span>
+                                                <li key={answer.answerId} className={s.answers}>
+                                                    {answer.answerText} {setHighlightAnswers(correctAnswer, userAnswer, i)}
                                                 </li>
                                             );
                                         })}

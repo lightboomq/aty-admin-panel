@@ -1,3 +1,4 @@
+import DeleteQuestion from './Admin/TicketComponets/DeleteQuestion.jsx';
 import UserStorage from './store/UserStorage.js';
 
 const catchError = err => {
@@ -104,7 +105,7 @@ export const userRequests = {
                 body: JSON.stringify({ isPassExam: flag }),
             });
             const userJson = await res.json();
-            
+
             if (res.ok) {
                 if (flag) {
                     return UserStorage.setExamPassedUsers(userJson);
@@ -120,4 +121,174 @@ export const userRequests = {
     },
 
     async getResultTestUser() {},
+};
+
+export const ticketRequests = {
+    async getAllTickets(setAllTickets) {
+        //Компонет EditTickets
+        try {
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/tickets', {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+
+            if (res.ok) return setAllTickets(data);
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
+
+    async getTicket(
+        i,
+        ticketId,
+        setSelectedTicket,
+        setIdSelectedTicket,
+        setIndexTicket,
+        setIsLoading,
+        setIsTagSelect,
+        setSelectedOption,
+        setLengthTicket,
+    ) {
+        try {
+            //Компонет EditTickets
+            setIndexTicket(i);
+            setIsLoading(true);
+            setIsTagSelect(false);
+            setSelectedOption('');
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    ticketId: ticketId,
+                }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setIsLoading(false);
+                setSelectedTicket(data);
+                setIdSelectedTicket(ticketId);
+                setIsTagSelect(true);
+                setLengthTicket(data.length + 1);
+                return;
+            }
+
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
+
+    async createEmptyTicket(setIsLoading, setAllTickets) {
+        //Компонент CreateEmptyTicket
+        try {
+            setIsLoading(true);
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/createTicket', {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const data = await res.json();
+            if (res.ok) {
+                setAllTickets(prev => [...prev, data.ticketId]);
+                setIsLoading(false);
+                return;
+            }
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
+
+    async deleteQuestion(
+        idSelectedTicket,
+        questionId,
+        setSelectedTicket,
+        numberQuestion,
+        selectedTicket,
+        setSelectedQuestion,
+        setNumberQuestion,
+        refOption,
+        setIsGif
+    ) {
+        
+        try {
+            //Компонент DeleteQuestion
+            const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
+
+            if (!action) return;
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/deleteQuestion', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    ticketId: idSelectedTicket,
+                    questionId: questionId,
+                }),
+            });
+
+            setIsGif(true);
+            if (res.ok) {
+                setTimeout(() => {
+                    refOption.current.textContent = `Изменить вопрос: ${numberQuestion}`;
+                    const cloneTicket = [...selectedTicket];
+                    cloneTicket.splice(numberQuestion, 1);
+                    const cloneQuestion = { ...selectedTicket[numberQuestion - 1] };
+                    setSelectedQuestion(cloneQuestion);
+                    setNumberQuestion(numberQuestion - 1);
+                    setSelectedTicket(cloneTicket);
+                    setIsGif(false);
+                }, 1250);
+                return;
+            }
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
+
+    // async deleteQuestion(){
+    //     try {
+
+    //         if (res.ok) {
+
+    //         }
+    //         throw new Error(res.message)
+    //     } catch (err) {
+    //         catchError(err);
+    //     }
+    // },
+
+    // async deleteQuestion(){
+    //     try {
+
+    //         if (res.ok) {
+
+    //         }
+    //         throw new Error(res.message)
+    //     } catch (err) {
+    //         catchError(err);
+    //     }
+    // },
+
+    // async deleteQuestion(){
+    //     try {
+
+    //         if (res.ok) {
+
+    //         }
+    //         throw new Error(res.message)
+    //     } catch (err) {
+    //         catchError(err);
+    //     }
+    // },
 };
