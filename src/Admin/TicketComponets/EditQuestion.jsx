@@ -1,10 +1,10 @@
 import React from 'react';
+import { ticketRequests } from '../../API.js';
 import gif from '../../../assets/check.gif';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
 import InputQuestion from './InputQuestion.jsx';
 import InputAnswer from './InputAnswer.jsx';
 import InputHelp from './InputHelp.jsx';
-import DeleteQuestion from './DeleteQuestion.jsx';
 import s from '../ticketStyles/editQuestion.module.css';
 
 function EditQuestion({
@@ -19,36 +19,12 @@ function EditQuestion({
 }) {
     const [isImg, setIsImg] = React.useState(false);
     const [imgSrc, setImgSrc] = React.useState(selectedQuestion.img);
-    const [isGif, setIsGif] = React.useState(false);
+    const [isGifSave, setIsGifSave] = React.useState(false);
+    const [isGifDelete, setIsGifDelete] = React.useState(false);
+
     const correctAnswer = selectedQuestion.answers.findIndex(obj => obj.isCorrect === true);
-    const token = localStorage.getItem('token');
+
     const ref = React.useRef(null);
-
-    async function saveTicket(e) {
-        e.preventDefault();
-        const formData = new FormData(e.target);
-
-        if (isImg) formData.delete('img');
-
-        formData.append('ticketId', idSelectedTicket);
-        formData.append('questionId', selectedQuestion.questionId);
-
-        const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
-            method: 'PATCH',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: formData,
-        });
-        setIsGif(true);
-
-        if (res.ok) {
-            setTimeout(() => {
-                setIsGif(false);
-                setIsImg(false);
-            }, 1250);
-        }
-    }
 
     function getClearInputFile() {
         ref.current.value = '';
@@ -57,7 +33,7 @@ function EditQuestion({
     }
     return (
         <div className={s.wrapper}>
-            <form onSubmit={saveTicket}>
+            <form onSubmit={e => ticketRequests.saveQuestion(e, idSelectedTicket, selectedQuestion, isImg, setIsGifSave, setIsImg)}>
                 <div key={selectedQuestion.questionId}>
                     {imgSrc ? (
                         <div className={s.wrapperImg}>
@@ -106,19 +82,31 @@ function EditQuestion({
                         <button type='submit' className={s.btn}>
                             Сохранить изменения
                         </button>
-                        {isGif && <img className={s.gif} src={gif} alt='gif' />}
+                        {isGifSave && <img className={s.gif} src={gif} alt='gif' />}
                     </div>
 
-                    <DeleteQuestion
-                        setSelectedTicket={setSelectedTicket}
-                        idSelectedTicket={idSelectedTicket}
-                        questionId={selectedQuestion.questionId}
-                        numberQuestion={numberQuestion}
-                        selectedTicket={selectedTicket}
-                        setSelectedQuestion={setSelectedQuestion}
-                        setNumberQuestion={setNumberQuestion}
-                        refOption={refOption}
-                    />
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        {isGifDelete && <img style={{ marginRight: '10px' }} width={25} height={25} src={gif} alt='gif' />}
+                        <button
+                            type='button'
+                            onClick={() =>
+                                ticketRequests.deleteQuestion(
+                                    idSelectedTicket,
+                                    selectedQuestion.questionId,
+                                    setSelectedTicket,
+                                    numberQuestion,
+                                    selectedTicket,
+                                    setSelectedQuestion,
+                                    setNumberQuestion,
+                                    refOption,
+                                    setIsGifDelete,
+                                )
+                            }
+                            className={s.btn}
+                        >
+                            Удалить вопрос
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

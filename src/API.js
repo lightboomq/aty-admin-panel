@@ -1,4 +1,3 @@
-import DeleteQuestion from './Admin/TicketComponets/DeleteQuestion.jsx';
 import UserStorage from './store/UserStorage.js';
 
 const catchError = err => {
@@ -216,11 +215,10 @@ export const ticketRequests = {
         setSelectedQuestion,
         setNumberQuestion,
         refOption,
-        setIsGif
+        setIsGifDelete,
     ) {
-        
         try {
-            //Компонент DeleteQuestion
+            //Компонент EditQuestion
             const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
 
             if (!action) return;
@@ -236,7 +234,7 @@ export const ticketRequests = {
                 }),
             });
 
-            setIsGif(true);
+            setIsGifDelete(true);
             if (res.ok) {
                 setTimeout(() => {
                     refOption.current.textContent = `Изменить вопрос: ${numberQuestion}`;
@@ -246,7 +244,7 @@ export const ticketRequests = {
                     setSelectedQuestion(cloneQuestion);
                     setNumberQuestion(numberQuestion - 1);
                     setSelectedTicket(cloneTicket);
-                    setIsGif(false);
+                    setIsGifDelete(false);
                 }, 1250);
                 return;
             }
@@ -256,39 +254,71 @@ export const ticketRequests = {
         }
     },
 
-    // async deleteQuestion(){
-    //     try {
+    async deleteTicket(idSelectedTicket, allTickets, setAllTickets, indexTicket, setIsTagSelect, setSelectedOption, setIsLoading) {
+        //Компонент DeleteTicket
+        try {
+            const action = confirm('Удалить выбраный билет? Все данные безвозратно будут удалены');
 
-    //         if (res.ok) {
+            if (!action) return;
+            setIsLoading(true);
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/deleteTicket', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    ticketId: idSelectedTicket,
+                }),
+            });
 
-    //         }
-    //         throw new Error(res.message)
-    //     } catch (err) {
-    //         catchError(err);
-    //     }
-    // },
+            if (res.ok) {
+                setIsLoading(false);
+                const copy = [...allTickets];
+                copy.splice(indexTicket, 1);
+                setAllTickets(copy);
+                setIsTagSelect(false);
+                setSelectedOption('');
+                return;
+            }
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
 
-    // async deleteQuestion(){
-    //     try {
+    async saveQuestion(e,idSelectedTicket,selectedQuestion,isImg,setIsGifSave,setIsImg) {
+        //Компонент EditTicket
+        try {
+            e.preventDefault();
+            const formData = new FormData(e.target);
 
-    //         if (res.ok) {
+            if (isImg) formData.delete('img');
 
-    //         }
-    //         throw new Error(res.message)
-    //     } catch (err) {
-    //         catchError(err);
-    //     }
-    // },
+            formData.append('ticketId', idSelectedTicket);
+            formData.append('questionId', selectedQuestion.questionId);
 
-    // async deleteQuestion(){
-    //     try {
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+            setIsGifSave(true);
 
-    //         if (res.ok) {
+            if (res.ok) {
+                setTimeout(() => {
+                    setIsGifSave(false);
+                    setIsImg(false);
+                }, 1250);
+                return;
+            }
+            
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
 
-    //         }
-    //         throw new Error(res.message)
-    //     } catch (err) {
-    //         catchError(err);
-    //     }
-    // },
 };

@@ -10,7 +10,7 @@ import s from '../ticketStyles/editTickets.module.css';
 
 function EditTickets() {
     const selectRef = React.useRef(null);
-    const [allTickets, setAllTickets] = React.useState([]);
+    const [allTickets, setAllTickets] = React.useState([]); 
     const [selectedTicket, setSelectedTicket] = React.useState([]);
     const [lengthTicket, setLengthTicket] = React.useState(null);
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
@@ -21,11 +21,26 @@ function EditTickets() {
     const [isLoading, setIsLoading] = React.useState(false);
     const [isTagSelect, setIsTagSelect] = React.useState(false);
     const refOption = React.useRef(null);
-
+    
     React.useEffect(() => {
         ticketRequests.getAllTickets(setAllTickets);
     }, []);
 
+    // const props = {
+    //     allTickets,
+    //     selectedTicket,
+    //     lengthTicket,
+    //     idSelectedTicket,
+    //     indexTicket,
+    //     selectedOption,
+    //     numberQuestion,
+    //     selectedQuestion,
+    //     isLoading,
+    //     isTagSelect,
+    //     setAllTickets,
+    //     setSelectedTicket,
+    // }
+    
 
     function getSelect() {
         const string = selectRef.current.value;
