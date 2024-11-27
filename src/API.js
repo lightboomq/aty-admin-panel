@@ -119,7 +119,32 @@ export const userRequests = {
         }
     },
 
-    async getResultTestUser() {},
+    async getResultTestUser(email,setIsLoader,setIsOpen, setQuestions) {
+        try {
+            setIsLoader(true)
+            const res = await fetch('http://147.45.159.11/api/userEditor/getExamResult', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    email: email,
+                }),
+            });
+            const data = await res.json();
+            setIsLoader(false);
+            if(res.ok){
+                setQuestions(data);
+                setIsOpen(true);
+                return;
+            }
+
+            throw new Error(res.message)
+        } catch (err) {
+            catchError(err)
+        }
+    },
 };
 
 export const ticketRequests = {
@@ -144,13 +169,7 @@ export const ticketRequests = {
     async getTicket(
         i,
         ticketId,
-        setSelectedTicket,
-        setIdSelectedTicket,
-        setIndexTicket,
-        setIsLoading,
-        setIsTagSelect,
-        setSelectedOption,
-        setLengthTicket,
+        { setSelectedTicket, setIdSelectedTicket, setIndexTicket, setIsLoading, setIsTagSelect, setSelectedOption, setLengthTicket },
     ) {
         try {
             //Компонет EditTickets
@@ -184,6 +203,36 @@ export const ticketRequests = {
         }
     },
 
+    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc) {
+        //Компонент AddQuestion
+        try {
+            e.preventDefault();
+            const form = new FormData(e.target);
+            form.append('ticketId', idSelectedTicket);
+            const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: form,
+            });
+            if (res.ok) {
+                setIsGif(true);
+                const timerId = setTimeout(() => {
+                    setLengthTicket(lengthTicket + 1);
+                    e.target.reset();
+                    setIsGif(false);
+                    setImgSrc('');
+                    clearTimeout(timerId);
+                }, 1250);
+                return;
+            }
+            throw new Error(res.message);
+        } catch (err) {
+            catchError(err);
+        }
+    },
+
     async createEmptyTicket(setIsLoading, setAllTickets) {
         //Компонент CreateEmptyTicket
         try {
@@ -207,18 +256,21 @@ export const ticketRequests = {
     },
 
     async deleteQuestion(
-        idSelectedTicket,
-        questionId,
-        setSelectedTicket,
-        numberQuestion,
-        selectedTicket,
-        setSelectedQuestion,
-        setNumberQuestion,
-        refOption,
+        {
+            idSelectedTicket,
+            selectedQuestion,
+            setSelectedTicket,
+            numberQuestion,
+            selectedTicket,
+            setSelectedQuestion,
+            setNumberQuestion,
+            refOption,
+        },
         setIsGifDelete,
     ) {
         try {
             //Компонент EditQuestion
+
             const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
 
             if (!action) return;
@@ -230,7 +282,7 @@ export const ticketRequests = {
                 },
                 body: JSON.stringify({
                     ticketId: idSelectedTicket,
-                    questionId: questionId,
+                    questionId: selectedQuestion.questionId,
                 }),
             });
 
@@ -287,7 +339,7 @@ export const ticketRequests = {
         }
     },
 
-    async saveQuestion(e,idSelectedTicket,selectedQuestion,isImg,setIsGifSave,setIsImg) {
+    async saveQuestion(e, { idSelectedTicket, selectedQuestion }, isImg, setIsGifSave, setIsImg) {
         //Компонент EditTicket
         try {
             e.preventDefault();
@@ -314,11 +366,10 @@ export const ticketRequests = {
                 }, 1250);
                 return;
             }
-            
+
             throw new Error(res.message);
         } catch (err) {
             catchError(err);
         }
     },
-
 };

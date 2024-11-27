@@ -1,58 +1,31 @@
 import React from 'react';
-import s from '../ticketStyles/addQuestion.module.css';
+import { ticketRequests } from '../../API';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
 import gif from '../../../assets/check.gif';
+import s from '../ticketStyles/addQuestion.module.css';
 
 function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
     const [imgSrc, setImgSrc] = React.useState(null);
     const [isImg, setIsImg] = React.useState(false);
     const [inputCount, setInputCount] = React.useState([0, 1]);
     const [isGif, setIsGif] = React.useState(false);
-    const [err, setErr] = React.useState('');
-    function createInput() {
-        if (inputCount.length > 4) return false;
+   
+    const createInput = () => {
+        if (inputCount.length > 4) return;
         setInputCount([...inputCount, inputCount[inputCount.length - 1] + 1]); // для key 54 строка
-    }
-
-    function deleteInput() {
-        if (inputCount.length === 2) return false;
+    };
+    const deleteInput = () => {
+        if (inputCount.length === 2) return;
         const updateState = inputCount.slice(0, inputCount.length - 1);
         setInputCount(updateState);
-    }
+    };
 
-    async function saveQuestion(e) {
-        e.preventDefault();
-        const token = localStorage.getItem('token');
-        const form = new FormData(e.target);
-
-        form.append('ticketId', idSelectedTicket);
-
-        try {
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: form,
-            });
-
-            if (res.ok) {
-                setIsGif(true);
-                const timerId = setTimeout(() => {
-                    setLengthTicket(lengthTicket + 1);
-                    e.target.reset();
-                    setIsGif(false);
-                    setImgSrc('');
-                    clearTimeout(timerId);
-                }, 1250);
-            }
-        } catch (message) {
-            setErr(message);
-        }
-    }
-
+    
     return (
-        <form onSubmit={saveQuestion} className={s.wrapper}>
+        <form
+            onSubmit={e => ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc)}
+            className={s.wrapper}
+        >
             <h4>{`Вопрос: ${lengthTicket}`}</h4>
             {imgSrc && !isImg ? (
                 <div className={s.wrapperImg}>

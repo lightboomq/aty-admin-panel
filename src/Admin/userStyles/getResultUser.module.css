@@ -31,6 +31,8 @@
 .userName{
     display: flex;
     justify-content: center;
+    margin-top: 5px;
+    font-weight: lighter;
 }
 .wrapperLogoClose{
     display: flex;
@@ -71,6 +73,7 @@
 }
 .answers{
     margin-top: 15px;
+    margin-left: 17px;
 }
 .green{
     color: green;

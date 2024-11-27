@@ -2,14 +2,28 @@ import React from 'react';
 import logo from '../../../assets/resultExamUser.svg';
 import logoClose from '../../../assets/deleteImg.svg';
 import Loader from '../layout/Loader.jsx';
-import {userRequests} from '../../API.js';
+import { userRequests } from '../../API.js';
 import s from '../userStyles/getResultUser.module.css';
 
 function GetResultUser({ email, userName, testResult }) {
     const [questions, setQuestions] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
     const [isLoader, setIsLoader] = React.useState(false);
-  
+
+    function getUserCorrectAnswers(){
+        let count = 0;
+        
+        for(let i=0; i<questions.length; i++){
+            const userAnswer = questions[i].userAnswerId;
+            for(let j=0; j<questions[i].answers.length; j++){
+                if(userAnswer === questions[i].answers[j].answerId && questions[i].answers[j].isCorrect){
+                    count++;
+                }    
+            }
+        }
+        return `Правильных ответов ${count} из ${questions.length}`;
+    }
+    
     function setHighlightAnswers(correctAnswer, userAnswer, i) {
         if (i === correctAnswer && i === userAnswer) return <span className={s.green}>(Эталон) (Ваш ответ)</span>;
         if (i === correctAnswer) return <span className={s.green}>(Эталон)</span>;
@@ -21,7 +35,12 @@ function GetResultUser({ email, userName, testResult }) {
         <>
             <div className={s.wrapperLogoShowResult}>
                 {isLoader && <Loader color='blue' />}
-                <img src={logo} onClick={()=>userRequests.getResultTestUser(email,setIsLoader,setIsOpen, setQuestions)} style={{ cursor: 'pointer', marginLeft: '3px' }} alt='resultExam' />
+                <img
+                    src={logo}
+                    onClick={() => userRequests.getResultTestUser(email, setIsLoader, setIsOpen, setQuestions)}
+                    style={{ cursor: 'pointer', marginLeft: '3px' }}
+                    alt='resultExam'
+                />
             </div>
 
             {isOpen && (
@@ -32,6 +51,7 @@ function GetResultUser({ email, userName, testResult }) {
                         </div>
                         <h3 className={s.testResult}>{testResult}</h3>
                         <h3 className={s.userName}>{userName}</h3>
+                        <h3 className={s.userName}>{getUserCorrectAnswers()}</h3>
 
                         {questions.map(question => {
                             const correctAnswer = question.answers.findIndex(answer => answer.isCorrect === true);

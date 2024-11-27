@@ -11,7 +11,7 @@ import UserStorage from '../store/UserStorage.js';
 import { observer } from 'mobx-react-lite';
 
 function Admin() {
-    const [aciveTab, setActiveTab] = React.useState('editorTickets');
+    const [aciveTab, setActiveTab] = React.useState('examNotPassed');
 
     React.useEffect(() => {
         userRequests.getAllUsers();

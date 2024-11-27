@@ -10,7 +10,7 @@ import s from '../ticketStyles/editTickets.module.css';
 
 function EditTickets() {
     const selectRef = React.useRef(null);
-    const [allTickets, setAllTickets] = React.useState([]); 
+    const [allTickets, setAllTickets] = React.useState([]);
     const [selectedTicket, setSelectedTicket] = React.useState([]);
     const [lengthTicket, setLengthTicket] = React.useState(null);
     const [idSelectedTicket, setIdSelectedTicket] = React.useState('');
@@ -21,26 +21,34 @@ function EditTickets() {
     const [isLoading, setIsLoading] = React.useState(false);
     const [isTagSelect, setIsTagSelect] = React.useState(false);
     const refOption = React.useRef(null);
-    
+
+    const states = {
+        allTickets,
+        selectedTicket,
+        lengthTicket,
+        idSelectedTicket,
+        indexTicket,
+        selectedOption,
+        numberQuestion,
+        selectedQuestion,
+        isLoading,
+        isTagSelect,
+        setAllTickets,
+        setSelectedTicket,
+        setLengthTicket,
+        setIdSelectedTicket,
+        setIndexTicket,
+        setSelectedOption,
+        setNumberQuestion,
+        setSelectedQuestion,
+        setIsLoading,
+        setIsTagSelect,
+        refOption,
+    };
+
     React.useEffect(() => {
         ticketRequests.getAllTickets(setAllTickets);
     }, []);
-
-    // const props = {
-    //     allTickets,
-    //     selectedTicket,
-    //     lengthTicket,
-    //     idSelectedTicket,
-    //     indexTicket,
-    //     selectedOption,
-    //     numberQuestion,
-    //     selectedQuestion,
-    //     isLoading,
-    //     isTagSelect,
-    //     setAllTickets,
-    //     setSelectedTicket,
-    // }
-    
 
     function getSelect() {
         const string = selectRef.current.value;
@@ -79,19 +87,7 @@ function EditTickets() {
                     return (
                         <div
                             key={ticketId}
-                            onClick={() =>
-                                ticketRequests.getTicket(
-                                    i,
-                                    ticketId,
-                                    setSelectedTicket,
-                                    setIdSelectedTicket,
-                                    setIndexTicket,
-                                    setIsLoading,
-                                    setIsTagSelect,
-                                    setSelectedOption,
-                                    setLengthTicket,
-                                )
-                            }
+                            onClick={() => ticketRequests.getTicket(i, ticketId, { ...states })}
                             className={highlight(ticketId, idSelectedTicket)}
                         >
                             {i + 1}
@@ -115,41 +111,12 @@ function EditTickets() {
 
                         <option value='addQuestion'>Добавить вопрос в билет </option>
                     </select>
-                    <DeleteTicket
-                        allTickets={allTickets}
-                        setAllTickets={setAllTickets}
-                        idSelectedTicket={idSelectedTicket}
-                        indexTicket={indexTicket}
-                        setIsTagSelect={setIsTagSelect}
-                        setSelectedOption={setSelectedOption}
-                    />
+                    <DeleteTicket {...states} />
                 </div>
             )}
 
-            {selectedOption === 'changeQuestion' && (
-                <EditQuestion
-                    key={numberQuestion}
-                    setAllTickets={setAllTickets}
-                    selectedQuestion={selectedQuestion}
-                    setSelectedTicket={setSelectedTicket}
-                    idSelectedTicket={idSelectedTicket}
-                    questionId={selectedQuestion.questionId}
-                    numberQuestion={numberQuestion}
-                    selectedTicket={selectedTicket}
-                    setSelectedQuestion={setSelectedQuestion}
-                    setNumberQuestion={setNumberQuestion}
-                    refOption={refOption}
-                />
-            )}
-
-            {selectedOption === 'addQuestion' && (
-                <AddQuestion
-                    key={indexTicket}
-                    idSelectedTicket={idSelectedTicket}
-                    lengthTicket={lengthTicket}
-                    setLengthTicket={setLengthTicket}
-                />
-            )}
+            {selectedOption === 'changeQuestion' && <EditQuestion key={numberQuestion} states={states} />}
+            {selectedOption === 'addQuestion' && <AddQuestion key={indexTicket} {...states} />}
         </>
     );
 }

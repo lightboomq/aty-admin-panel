@@ -7,21 +7,14 @@ import InputAnswer from './InputAnswer.jsx';
 import InputHelp from './InputHelp.jsx';
 import s from '../ticketStyles/editQuestion.module.css';
 
-function EditQuestion({
-    setSelectedQuestion,
-    selectedQuestion,
-    idSelectedTicket,
-    selectedTicket,
-    setSelectedTicket,
-    numberQuestion,
-    setNumberQuestion,
-    refOption,
-}) {
+function EditQuestion({ states }) {
+    
     const [isImg, setIsImg] = React.useState(false);
-    const [imgSrc, setImgSrc] = React.useState(selectedQuestion.img);
+    const [imgSrc, setImgSrc] = React.useState(states.selectedQuestion.img);
     const [isGifSave, setIsGifSave] = React.useState(false);
     const [isGifDelete, setIsGifDelete] = React.useState(false);
 
+    const selectedQuestion = states.selectedQuestion;
     const correctAnswer = selectedQuestion.answers.findIndex(obj => obj.isCorrect === true);
 
     const ref = React.useRef(null);
@@ -33,7 +26,7 @@ function EditQuestion({
     }
     return (
         <div className={s.wrapper}>
-            <form onSubmit={e => ticketRequests.saveQuestion(e, idSelectedTicket, selectedQuestion, isImg, setIsGifSave, setIsImg)}>
+            <form onSubmit={e => ticketRequests.saveQuestion(e, { ...states }, isImg, setIsGifSave, setIsImg)}>
                 <div key={selectedQuestion.questionId}>
                     {imgSrc ? (
                         <div className={s.wrapperImg}>
@@ -89,19 +82,7 @@ function EditQuestion({
                         {isGifDelete && <img style={{ marginRight: '10px' }} width={25} height={25} src={gif} alt='gif' />}
                         <button
                             type='button'
-                            onClick={() =>
-                                ticketRequests.deleteQuestion(
-                                    idSelectedTicket,
-                                    selectedQuestion.questionId,
-                                    setSelectedTicket,
-                                    numberQuestion,
-                                    selectedTicket,
-                                    setSelectedQuestion,
-                                    setNumberQuestion,
-                                    refOption,
-                                    setIsGifDelete,
-                                )
-                            }
+                            onClick={() => ticketRequests.deleteQuestion({ ...states }, setIsGifDelete)}
                             className={s.btn}
                         >
                             Удалить вопрос
