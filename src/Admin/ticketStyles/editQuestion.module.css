@@ -76,5 +76,8 @@
 .btn{
     cursor: pointer;
 }
-
+.errors{
+    color: red;
+    font-weight: lighter;
+}
 

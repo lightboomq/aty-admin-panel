@@ -6,7 +6,7 @@ import s from '../userStyles/users.module.css';
 
 function SetExamUser({ email, userName, firstName, secondName }) {
     const refImgHidden = React.useRef(null);
-
+    
     function setExam() {
         userRequests.setExamUser(email, userName);
         UserStorage.setExamUser({ email, firstName, secondName });

@@ -11,7 +11,7 @@ function DeleteUser({ email, userName, gender }) {
 
         const token = localStorage.getItem('token');
 
-        await fetch('http://147.45.159.11/api/userEditor/deleteUser', {
+        await fetch('http://localhost:3333/api/userEditor/deleteUser', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,15 +1,18 @@
 import React from 'react';
 import { ticketRequests } from '../../API';
+import Errors from '../../store/Errors';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
 import gif from '../../../assets/check.gif';
 import s from '../ticketStyles/addQuestion.module.css';
+import { observer } from 'mobx-react-lite';
 
 function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
-    const [imgSrc, setImgSrc] = React.useState(null);
-    const [isImg, setIsImg] = React.useState(false);
+    const [imgSrc, setImgSrc] = React.useState('');
     const [inputCount, setInputCount] = React.useState([0, 1]);
     const [isGif, setIsGif] = React.useState(false);
-   
+    const dropZoneRef = React.useRef(null);
+    const fileInputRef = React.useRef(null);
+
     const createInput = () => {
         if (inputCount.length > 4) return;
         setInputCount([...inputCount, inputCount[inputCount.length - 1] + 1]); // для key 54 строка
@@ -20,35 +23,56 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
         setInputCount(updateState);
     };
 
-    
+    const dropZoneDragOver = e => {
+        e.preventDefault();
+        dropZoneRef.current.style.border = '2px dashed black';
+    };
+    const dropZoneDragLeave = e => {
+        e.preventDefault();
+        dropZoneRef.current.style.border = '2px dashed #ccc';
+    };
+    const dropZoneDrop = e => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        console.log(file)
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => {
+            setImgSrc(e.target.result);
+        };
+    };
+    const inputFile = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => setImgSrc(e.target.result);
+    };
+
     return (
         <form
             onSubmit={e => ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc)}
             className={s.wrapper}
         >
             <h4>{`Вопрос: ${lengthTicket}`}</h4>
-            {imgSrc && !isImg ? (
+            {imgSrc ? (
                 <div className={s.wrapperImg}>
                     <img className={s.picture} src={imgSrc} alt='' />
-                    <img className={s.logoDeleteImg} onClick={() => setIsImg(true)} src={logoDeleteImg} alt='logoDeleteImg' />
+                    <img className={s.logoDeleteImg} onClick={() => setImgSrc('')} src={logoDeleteImg} alt='logoDeleteImg' />
                 </div>
             ) : (
-                <div className={`${s.withoutPicture} `}>Вопрос без рисунка</div>
+                <div
+                    className={s.dropZone}
+                    ref={dropZoneRef}
+                    onDragOver={dropZoneDragOver}
+                    onDragLeave={dropZoneDragLeave}
+                    onDrop={dropZoneDrop}
+                    onClick={() => fileInputRef.current.click()}
+                    name='img'
+                >
+                    Нажмите или перетащите изображение сюда
+                </div>
             )}
-
-            <input
-                className={s.inputFile}
-                onInput={event => {
-                    const file = event.target.files[0];
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = e => {
-                        setImgSrc(e.target.result);
-                    };
-                }}
-                name='img'
-                type='file'
-            />
+            <input type='file' name='img' className={s.inputFile} ref={fileInputRef} onChange={inputFile} />
 
             <div className={s.wrapperInput}>
                 <div style={{ color: 'blue', fontSize: '24px' }}>*</div>
@@ -83,9 +107,10 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
                     Сохранить
                 </button>
                 {isGif && <img className={s.gif} src={gif} alt='gif' />}
+                <h4 className={s.errors}>{Errors.getMessage()}</h4>
             </div>
         </form>
     );
 }
 
-export default AddQuestion;
+export default observer(AddQuestion);

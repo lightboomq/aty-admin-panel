@@ -10,7 +10,7 @@ function Login() {
 
     async function enter() {
         try {
-            const response = await fetch('http://147.45.159.11/api/auth/adminLogin', {
+            const response = await fetch('http://localhost:3333/api/auth/adminLogin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

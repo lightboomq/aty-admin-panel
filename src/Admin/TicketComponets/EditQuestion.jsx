@@ -1,14 +1,15 @@
 import React from 'react';
 import { ticketRequests } from '../../API.js';
+import Errors from '../../store/Errors.js';
 import gif from '../../../assets/check.gif';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
 import InputQuestion from './InputQuestion.jsx';
 import InputAnswer from './InputAnswer.jsx';
 import InputHelp from './InputHelp.jsx';
 import s from '../ticketStyles/editQuestion.module.css';
+import { observer } from 'mobx-react-lite';
 
 function EditQuestion({ states }) {
-    
     const [isImg, setIsImg] = React.useState(false);
     const [imgSrc, setImgSrc] = React.useState(states.selectedQuestion.img);
     const [isGifSave, setIsGifSave] = React.useState(false);
@@ -78,6 +79,8 @@ function EditQuestion({ states }) {
                         {isGifSave && <img className={s.gif} src={gif} alt='gif' />}
                     </div>
 
+                    <h4 className={s.errors}>{Errors.getMessage()}</h4>
+
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         {isGifDelete && <img style={{ marginRight: '10px' }} width={25} height={25} src={gif} alt='gif' />}
                         <button
@@ -94,4 +97,4 @@ function EditQuestion({ states }) {
     );
 }
 
-export default EditQuestion;
+export default observer(EditQuestion);

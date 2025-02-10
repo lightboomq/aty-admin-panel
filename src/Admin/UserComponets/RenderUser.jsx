@@ -34,7 +34,7 @@ function RenderUser({ users, department }) {
                 {isInput && isOpen && (
                     <input
                         className={s.inputSearchUser}
-                        type='text'
+                        type='search'
                         value={inputValue}
                         onChange={e => setInputValue(e.target.value)}
                         placeholder='Поиск по фамилий...'

@@ -1,8 +1,5 @@
 import UserStorage from './store/UserStorage.js';
-
-const catchError = err => {
-    console.log(err);
-};
+import Errors from './store/Errors.js';
 
 const token = localStorage.getItem('token');
 
@@ -10,7 +7,7 @@ export const userRequests = {
     async getAllUsers() {
         //Компонент user
         try {
-            const res = await fetch('http://147.45.159.11/api/userEditor/getAllUsers', {
+            const res = await fetch('http://localhost:3333/api/userEditor/getAllUsers', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -33,7 +30,7 @@ export const userRequests = {
     async getUsersWithActiveExam() {
         //Компонент ActiveExam
         try {
-            const res = await fetch('http://147.45.159.11/api/userEditor/getUsersWithAppointExam', {
+            const res = await fetch('http://localhost:3333/api/userEditor/getUsersWithAppointExam', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -56,7 +53,7 @@ export const userRequests = {
             const action = confirm(`Назначить экзамен ${userName}?`);
             if (!action) return;
 
-            const res = await fetch('http://147.45.159.11/api/userEditor/appoint', {
+            const res = await fetch('http://localhost:3333/api/userEditor/appoint', {
                 //Назначить экзамен для пользователя
                 method: 'POST',
                 headers: {
@@ -79,10 +76,11 @@ export const userRequests = {
         const action = confirm(`Отменить экзамен ${userName}?`);
         if (!action) return;
 
-        await fetch('http://147.45.159.11/api/userEditor/appoint', {
+        await fetch('http://localhost:3333/api/userEditor/appoint', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+
                 Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
@@ -95,7 +93,7 @@ export const userRequests = {
 
     async getUsersWithResultExam(flag) {
         try {
-            const res = await fetch('http://147.45.159.11/api/userEditor/getUsersWithResultExam', {
+            const res = await fetch('http://localhost:3333/api/userEditor/getUsersWithResultExam', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -119,10 +117,11 @@ export const userRequests = {
         }
     },
 
-    async getResultTestUser(email,setIsLoader,setIsOpen, setQuestions) {
+    async getResultTestUser(email, setIsLoader, setIsOpen, setQuestions) {
+        
         try {
-            setIsLoader(true)
-            const res = await fetch('http://147.45.159.11/api/userEditor/getExamResult', {
+            setIsLoader(true);
+            const res = await fetch('http://localhost:3333/api/userEditor/getExamResult', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -134,15 +133,15 @@ export const userRequests = {
             });
             const data = await res.json();
             setIsLoader(false);
-            if(res.ok){
+            if (res.ok) {
                 setQuestions(data);
                 setIsOpen(true);
                 return;
             }
 
-            throw new Error(res.message)
+            throw new Error(res.message);
         } catch (err) {
-            catchError(err)
+            catchError(err);
         }
     },
 };
@@ -151,7 +150,7 @@ export const ticketRequests = {
     async getAllTickets(setAllTickets) {
         //Компонет EditTickets
         try {
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/tickets', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/tickets', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -177,7 +176,7 @@ export const ticketRequests = {
             setIsLoading(true);
             setIsTagSelect(false);
             setSelectedOption('');
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/getQuestions', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/getQuestions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -208,15 +207,21 @@ export const ticketRequests = {
         try {
             e.preventDefault();
             const form = new FormData(e.target);
+            for (const el of form) {
+                console.log(el)
+            }
+            // form.append('img',)
             form.append('ticketId', idSelectedTicket);
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/createQuestion', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/createQuestion', {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
                 body: form,
             });
+
             if (res.ok) {
+                Errors.setMessage('');
                 setIsGif(true);
                 const timerId = setTimeout(() => {
                     setLengthTicket(lengthTicket + 1);
@@ -227,9 +232,11 @@ export const ticketRequests = {
                 }, 1250);
                 return;
             }
-            throw new Error(res.message);
+
+            const err = await res.json();
+            throw new Error(err.message);
         } catch (err) {
-            catchError(err);
+            Errors.setMessage(err.message);
         }
     },
 
@@ -237,7 +244,7 @@ export const ticketRequests = {
         //Компонент CreateEmptyTicket
         try {
             setIsLoading(true);
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/createTicket', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/createTicket', {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -274,7 +281,7 @@ export const ticketRequests = {
             const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
 
             if (!action) return;
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/deleteQuestion', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/deleteQuestion', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -300,9 +307,10 @@ export const ticketRequests = {
                 }, 1250);
                 return;
             }
+
             throw new Error(res.message);
         } catch (err) {
-            catchError(err);
+            Errors.setMessage(err)
         }
     },
 
@@ -313,7 +321,7 @@ export const ticketRequests = {
 
             if (!action) return;
             setIsLoading(true);
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/deleteTicket', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/deleteTicket', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -340,7 +348,7 @@ export const ticketRequests = {
     },
 
     async saveQuestion(e, { idSelectedTicket, selectedQuestion }, isImg, setIsGifSave, setIsImg) {
-        //Компонент EditTicket
+        //Компонент EditQuestion
         try {
             e.preventDefault();
             const formData = new FormData(e.target);
@@ -350,16 +358,17 @@ export const ticketRequests = {
             formData.append('ticketId', idSelectedTicket);
             formData.append('questionId', selectedQuestion.questionId);
 
-            const res = await fetch('http://147.45.159.11/api/ticketEditor/editQuestion', {
+            const res = await fetch('http://localhost:3333/api/ticketEditor/editQuestion', {
                 method: 'PATCH',
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
                 body: formData,
             });
-            setIsGifSave(true);
 
             if (res.ok) {
+                setIsGifSave(true)
+                Errors.setMessage('');
                 setTimeout(() => {
                     setIsGifSave(false);
                     setIsImg(false);
@@ -367,9 +376,10 @@ export const ticketRequests = {
                 return;
             }
 
-            throw new Error(res.message);
+            const err = await res.json();
+            throw new Error(err.message);
         } catch (err) {
-            catchError(err);
+            Errors.setMessage(err.message);
         }
     },
 };

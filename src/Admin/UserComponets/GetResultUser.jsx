@@ -10,20 +10,20 @@ function GetResultUser({ email, userName, testResult }) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [isLoader, setIsLoader] = React.useState(false);
 
-    function getUserCorrectAnswers(){
+    function getUserCorrectAnswers() {
         let count = 0;
-        
-        for(let i=0; i<questions.length; i++){
+
+        for (let i = 0; i < questions.length; i++) {
             const userAnswer = questions[i].userAnswerId;
-            for(let j=0; j<questions[i].answers.length; j++){
-                if(userAnswer === questions[i].answers[j].answerId && questions[i].answers[j].isCorrect){
+            for (let j = 0; j < questions[i].answers.length; j++) {
+                if (userAnswer === questions[i].answers[j].answerId && questions[i].answers[j].isCorrect) {
                     count++;
-                }    
+                }
             }
         }
         return `Правильных ответов ${count} из ${questions.length}`;
     }
-    
+
     function setHighlightAnswers(correctAnswer, userAnswer, i) {
         if (i === correctAnswer && i === userAnswer) return <span className={s.green}>(Эталон) (Ваш ответ)</span>;
         if (i === correctAnswer) return <span className={s.green}>(Эталон)</span>;
@@ -49,8 +49,11 @@ function GetResultUser({ email, userName, testResult }) {
                         <div className={s.wrapperLogoClose}>
                             <img className={s.logoClose} src={logoClose} onClick={() => setIsOpen(false)} alt='close' />
                         </div>
-                        <h3 className={s.testResult}>{testResult}</h3>
+
+                        <h3 className={`${s.testResult} ${testResult === 'Экзамен сдан' ? s.green : s.red}`}>{testResult}</h3>
+
                         <h3 className={s.userName}>{userName}</h3>
+
                         <h3 className={s.userName}>{getUserCorrectAnswers()}</h3>
 
                         {questions.map(question => {
