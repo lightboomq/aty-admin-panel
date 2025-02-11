@@ -201,7 +201,7 @@ export const ticketRequests = {
         }
     },
 
-    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc, setSelectedTicket) {
+    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc) {
         //Компонент AddQuestion
         try {
             e.preventDefault();
@@ -218,7 +218,6 @@ export const ticketRequests = {
             });
 
             if (res.ok) {
-                setSelectedTicket(prev => [...prev, obj]);
                 Errors.setMessage('');
                 setIsGif(true);
                 const timerId = setTimeout(() => {
@@ -270,6 +269,7 @@ export const ticketRequests = {
             setSelectedQuestion,
             setNumberQuestion,
             refOption,
+            setLengthTicket
         },
         setIsGifDelete,
     ) {
@@ -302,6 +302,7 @@ export const ticketRequests = {
                     setNumberQuestion(numberQuestion - 1);
                     setSelectedTicket(cloneTicket);
                     setIsGifDelete(false);
+                    setLengthTicket((prev)=>prev-1);
                 }, 1250);
                 return;
             }

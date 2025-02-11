@@ -7,17 +7,16 @@ import gif from '../../../assets/check.gif';
 import s from '../ticketStyles/addQuestion.module.css';
 import { observer } from 'mobx-react-lite';
 
-function AddQuestion({ setSelectedTicket, idSelectedTicket, lengthTicket, setLengthTicket }) {
+function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
     const [imgSrc, setImgSrc] = React.useState('');
     const [inputCount, setInputCount] = React.useState([0, 1]);
     const [isGif, setIsGif] = React.useState(false);
-
     const imgRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
 
     const createInput = () => {
         if (inputCount.length > 4) return;
-        setInputCount([...inputCount, inputCount[inputCount.length - 1] + 1]); // для key 54 строка
+        setInputCount([...inputCount, inputCount[inputCount.length - 1] + 1]); // для key
     };
     const deleteInput = () => {
         if (inputCount.length === 2) return;
@@ -55,9 +54,7 @@ function AddQuestion({ setSelectedTicket, idSelectedTicket, lengthTicket, setLen
 
     return (
         <form
-            onSubmit={e =>
-                ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc, setSelectedTicket)
-            }
+            onSubmit={e => ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc)}
             className={s.wrapper}
         >
             <h4>{`Вопрос: ${lengthTicket}`}</h4>

@@ -20,7 +20,6 @@ function EditQuestion({ states }) {
     const imgRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
 
-
     const getClearInputFile = () => {
         fileInputRef.current.value = '';
         setIsImg(true);
