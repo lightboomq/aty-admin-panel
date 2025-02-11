@@ -7,10 +7,13 @@
     padding: 15px;
 
 }
+.inputFile{
+    display: none;
+    margin: 15px 0px 0px 15px;
+}
 .picture{
     width: 100%;
-    height: 250px;
-    object-fit: cover;
+    cursor: pointer;  
 }
 .withoutPicture{
     position: relative;

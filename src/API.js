@@ -118,7 +118,6 @@ export const userRequests = {
     },
 
     async getResultTestUser(email, setIsLoader, setIsOpen, setQuestions) {
-        
         try {
             setIsLoader(true);
             const res = await fetch('http://localhost:3333/api/userEditor/getExamResult', {
@@ -202,16 +201,14 @@ export const ticketRequests = {
         }
     },
 
-    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc) {
+    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc, setSelectedTicket) {
         //Компонент AddQuestion
         try {
             e.preventDefault();
+
             const form = new FormData(e.target);
-            for (const el of form) {
-                console.log(el)
-            }
-            // form.append('img',)
             form.append('ticketId', idSelectedTicket);
+
             const res = await fetch('http://localhost:3333/api/ticketEditor/createQuestion', {
                 method: 'POST',
                 headers: {
@@ -221,6 +218,7 @@ export const ticketRequests = {
             });
 
             if (res.ok) {
+                setSelectedTicket(prev => [...prev, obj]);
                 Errors.setMessage('');
                 setIsGif(true);
                 const timerId = setTimeout(() => {
@@ -310,7 +308,7 @@ export const ticketRequests = {
 
             throw new Error(res.message);
         } catch (err) {
-            Errors.setMessage(err)
+            Errors.setMessage(err);
         }
     },
 
@@ -367,7 +365,7 @@ export const ticketRequests = {
             });
 
             if (res.ok) {
-                setIsGifSave(true)
+                setIsGifSave(true);
                 Errors.setMessage('');
                 setTimeout(() => {
                     setIsGifSave(false);

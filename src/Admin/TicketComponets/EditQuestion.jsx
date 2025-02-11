@@ -1,5 +1,6 @@
 import React from 'react';
 import { ticketRequests } from '../../API.js';
+import DragAndDrop from './DragAndDrop.jsx';
 import Errors from '../../store/Errors.js';
 import gif from '../../../assets/check.gif';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
@@ -14,43 +15,59 @@ function EditQuestion({ states }) {
     const [imgSrc, setImgSrc] = React.useState(states.selectedQuestion.img);
     const [isGifSave, setIsGifSave] = React.useState(false);
     const [isGifDelete, setIsGifDelete] = React.useState(false);
-
     const selectedQuestion = states.selectedQuestion;
     const correctAnswer = selectedQuestion.answers.findIndex(obj => obj.isCorrect === true);
+    const imgRef = React.useRef(null);
+    const fileInputRef = React.useRef(null);
 
-    const ref = React.useRef(null);
 
-    function getClearInputFile() {
-        ref.current.value = '';
+    const getClearInputFile = () => {
+        fileInputRef.current.value = '';
         setIsImg(true);
         setImgSrc(null);
-    }
+    };
+
+    const inputFile = e => {
+        const file = e.target.files[0];
+        if (!file.type.startsWith('image/')) {
+            Errors.setMessage('Выберите изображение');
+            return;
+        }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = e => setImgSrc(e.target.result);
+    };
+
+    const openFullScreenImg = () => {
+        if (imgRef.current.requestFullscreen) {
+            return imgRef.current.requestFullscreen();
+        }
+        if (imgRef.current.mozRequestFullScreen) {
+            // Для Firefox
+            return imgRef.current.mozRequestFullScreen();
+        }
+        if (imgRef.current.webkitRequestFullscreen) {
+            // Для Safari
+            return imgRef.current.webkitRequestFullscreen();
+        }
+        // Для IE/Edge
+        return imgRef.current.msRequestFullscreen();
+    };
+
     return (
         <div className={s.wrapper}>
             <form onSubmit={e => ticketRequests.saveQuestion(e, { ...states }, isImg, setIsGifSave, setIsImg)}>
                 <div key={selectedQuestion.questionId}>
                     {imgSrc ? (
                         <div className={s.wrapperImg}>
-                            <img className={s.picture} src={imgSrc} alt='Обновите страницу' />
+                            <img className={s.picture} ref={imgRef} onClick={openFullScreenImg} src={imgSrc} alt='Обновите страницу' />
                             <img className={s.logoDeleteImg} onClick={getClearInputFile} src={logoDeleteImg} alt='logoDeleteImg' />
                         </div>
                     ) : (
-                        <div className={`${s.withoutPicture} `}>Вопрос без рисунка</div>
+                        <DragAndDrop fileInputRef={fileInputRef} setImgSrc={setImgSrc} />
                     )}
 
-                    <input
-                        ref={ref}
-                        onInput={event => {
-                            const file = event.target.files[0];
-                            const reader = new FileReader();
-                            reader.readAsDataURL(file);
-                            reader.onload = e => {
-                                setImgSrc(e.target.result);
-                            };
-                        }}
-                        name='img'
-                        type='file'
-                    />
+                    <input className={s.inputFile} ref={fileInputRef} onChange={inputFile} name='img' type='file' />
 
                     <InputQuestion question={selectedQuestion.question} />
 

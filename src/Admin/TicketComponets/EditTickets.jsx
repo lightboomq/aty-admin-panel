@@ -53,7 +53,7 @@ function EditTickets() {
     function getSelect() {
         const string = selectRef.current.value;
         const numberQuestion = string.length === 16 ? string[15] : string[15] + string[16];
-
+        
         switch (string) {
             case `changeQuestion ${numberQuestion}`: {
                 setSelectedOption('changeQuestion');
@@ -100,7 +100,11 @@ function EditTickets() {
 
             {isTagSelect && (
                 <div style={{ display: 'flex' }}>
-                    <select ref={selectRef} onChange={getSelect}>
+                    <select
+                        ref={selectRef}
+                        onChange={getSelect}
+                       
+                    >
                         <option ref={refOption} hidden value=''>
                             Выберите операцию
                         </option>

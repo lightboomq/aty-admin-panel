@@ -1,16 +1,18 @@
 import React from 'react';
 import { ticketRequests } from '../../API';
+import DragAndDrop from './DragAndDrop';
 import Errors from '../../store/Errors';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
 import gif from '../../../assets/check.gif';
 import s from '../ticketStyles/addQuestion.module.css';
 import { observer } from 'mobx-react-lite';
 
-function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
+function AddQuestion({ setSelectedTicket, idSelectedTicket, lengthTicket, setLengthTicket }) {
     const [imgSrc, setImgSrc] = React.useState('');
     const [inputCount, setInputCount] = React.useState([0, 1]);
     const [isGif, setIsGif] = React.useState(false);
-    const dropZoneRef = React.useRef(null);
+
+    const imgRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
 
     const createInput = () => {
@@ -23,56 +25,53 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
         setInputCount(updateState);
     };
 
-    const dropZoneDragOver = e => {
-        e.preventDefault();
-        dropZoneRef.current.style.border = '2px dashed black';
-    };
-    const dropZoneDragLeave = e => {
-        e.preventDefault();
-        dropZoneRef.current.style.border = '2px dashed #ccc';
-    };
-    const dropZoneDrop = e => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        console.log(file)
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = e => {
-            setImgSrc(e.target.result);
-        };
-    };
     const inputFile = e => {
         const file = e.target.files[0];
+        if (!file.type.startsWith('image/')) {
+            Errors.setMessage('Выберите изображение');
+            return;
+        }
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = e => setImgSrc(e.target.result);
     };
 
+    const openFullScreenImg = () => {
+        if (imgRef.current.requestFullscreen) {
+            return imgRef.current.requestFullscreen();
+        }
+        if (imgRef.current.mozRequestFullScreen) {
+            // Для Firefox
+            return imgRef.current.mozRequestFullScreen();
+        }
+        if (imgRef.current.webkitRequestFullscreen) {
+            // Для Safari
+            return imgRef.current.webkitRequestFullscreen();
+        }
+        // Для IE/Edge
+        return imgRef.current.msRequestFullscreen();
+    };
+
     return (
         <form
-            onSubmit={e => ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc)}
+            onSubmit={e =>
+                ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc, setSelectedTicket)
+            }
             className={s.wrapper}
         >
             <h4>{`Вопрос: ${lengthTicket}`}</h4>
+
             {imgSrc ? (
                 <div className={s.wrapperImg}>
-                    <img className={s.picture} src={imgSrc} alt='' />
+                    <img className={s.picture} onClick={openFullScreenImg} src={imgSrc} ref={imgRef} alt='' />
                     <img className={s.logoDeleteImg} onClick={() => setImgSrc('')} src={logoDeleteImg} alt='logoDeleteImg' />
                 </div>
             ) : (
-                <div
-                    className={s.dropZone}
-                    ref={dropZoneRef}
-                    onDragOver={dropZoneDragOver}
-                    onDragLeave={dropZoneDragLeave}
-                    onDrop={dropZoneDrop}
-                    onClick={() => fileInputRef.current.click()}
-                    name='img'
-                >
-                    Нажмите или перетащите изображение сюда
-                </div>
+                <DragAndDrop fileInputRef={fileInputRef} setImgSrc={setImgSrc} />
             )}
-            <input type='file' name='img' className={s.inputFile} ref={fileInputRef} onChange={inputFile} />
+
+            <input type='file' name='img' className={s.inputFile} ref={fileInputRef} onChange={inputFile} accept='image/*' />
 
             <div className={s.wrapperInput}>
                 <div style={{ color: 'blue', fontSize: '24px' }}>*</div>
