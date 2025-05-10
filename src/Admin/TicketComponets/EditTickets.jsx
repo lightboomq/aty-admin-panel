@@ -105,11 +105,11 @@ function EditTickets() {
                             Выберите операцию
                         </option>
 
-                        {selectedTicket.map((number, i) => {
+                        {selectedTicket.map((number, i) => {               
                             return <option key={number.questionId} value={`changeQuestion ${i + 1}`}>{`Изменить вопрос: ${i + 1}`}</option>;
                         })}
-
-                        <option value='addQuestion'>Добавить вопрос в билет </option>
+    
+                        <option value='addQuestion'>Добавить вопрос</option>
                     </select>
                     <DeleteTicket {...states} />
                 </div>

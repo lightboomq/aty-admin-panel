@@ -14,6 +14,7 @@ function DragAndDrop({ fileInputRef, setImgSrc }) {
     };
 
     const dropZone = e => {
+        
         e.preventDefault();
         const file = e.dataTransfer.files[0];
         if (!file.type.startsWith('image/')) {
@@ -24,8 +25,8 @@ function DragAndDrop({ fileInputRef, setImgSrc }) {
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         fileInputRef.current.files = dataTransfer.files;
-        console.log(fileInputRef.current.files)
         const reader = new FileReader();
+        
         reader.readAsDataURL(file);
         reader.onload = e => {
             console.log(true)
@@ -43,9 +44,7 @@ function DragAndDrop({ fileInputRef, setImgSrc }) {
             onDragLeave={leaveZone}
             onDrop={dropZone}
             onClick={() => {
-                console.log(true)
-                fileInputRef.current.click()
-
+                fileInputRef.current.click();
             }}
         >
             Нажмите или перетащите изображение сюда

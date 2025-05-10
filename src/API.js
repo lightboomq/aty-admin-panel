@@ -131,6 +131,7 @@ export const userRequests = {
                 }),
             });
             const data = await res.json();
+            console.log(data)
             setIsLoader(false);
             if (res.ok) {
                 setQuestions(data);
@@ -269,7 +270,7 @@ export const ticketRequests = {
             setSelectedQuestion,
             setNumberQuestion,
             refOption,
-            setLengthTicket
+            setLengthTicket,
         },
         setIsGifDelete,
     ) {
@@ -302,7 +303,7 @@ export const ticketRequests = {
                     setNumberQuestion(numberQuestion - 1);
                     setSelectedTicket(cloneTicket);
                     setIsGifDelete(false);
-                    setLengthTicket((prev)=>prev-1);
+                    setLengthTicket(prev => prev - 1);
                 }, 1250);
                 return;
             }
