@@ -8,7 +8,7 @@ function CreateEmptyTicket({ setAllTickets }) {
 
     return (
         <button type='button' onClick={() => ticketRequests.createEmptyTicket(setIsLoading, setAllTickets)} className={s.wrapper}>
-            {isLoading && <Loader color='blue' />}
+            {isLoading && <Loader color='blue' width={30} height={30}/>}
             <span className={s.plus}>+</span>
         </button>
     );

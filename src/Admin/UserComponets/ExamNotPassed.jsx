@@ -1,4 +1,3 @@
-import React from 'react';
 import GetResultUser from './GetResultUser.jsx';
 import logoUsers from '../../../assets/users.svg';
 import UserStorage from '../../store/UserStorage.js';
@@ -6,7 +5,7 @@ import s from '../userStyles/examsUser.module.css';
 
 function ExamNotPassed() {
     const users = UserStorage.getExamNotPassedUsers();
-
+ 
     function getDate(dateExam) {
         const date = new Date(dateExam);
         const day = date.getDate() <= 10 ? `0${date.getDate()}` : date.getDate();
@@ -28,7 +27,7 @@ function ExamNotPassed() {
             <div className={s.wrapperTitle}>
                 <img src={logoUsers} alt='users' />
                 <h3 style={{ marginLeft: '10px' }}>Пользователи</h3>
-                {/* {isLoader&& <Loader color='yellow'/>} */}
+                
             </div>
 
             {users.map((user, i) => {

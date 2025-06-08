@@ -1,25 +1,21 @@
-import React from 'react';
 import s from './modalWindow.module.css';
 
-function ModalWindow({text,userName,setConfirm,setModal}) {
-    
-    function confirmDelete(bool) {
-        setConfirm(bool);
-        setModal(false);
-    }
+
+function ModalWindow({ setIsOpenModal, text }) {
    
+
     return (
-        <div className={s.wrapper}>
+        <div className={s.wrapperModalWindow}>
             <div className={s.modalWindow}>
-                <h2>{text}</h2>
-                <p className={s.value}>{userName}</p>
-                <p className={s.value}>{text}</p>
-                <div className={s.btnModal}>
-                    <button onClick={() => confirmDelete(true)} style={{ color: 'green' }} className={s.btn} type='button'>
+                <p className={s.text}>{text}</p>
+
+                <div className={s.wrapperBtns}>
+                    <button onClick={() => setIsOpenModal(true)} className={`${s.btn} ${s.btnYes}`} type='button'>
                         Да
                     </button>
-                    <button onClick={() => confirmDelete(false)} style={{ color: 'red' }} className={s.btn} type='button'>
-                        Нет
+
+                    <button onClick={() => setIsOpenModal(false)} className={`${s.btn} ${s.btnNo}`} type='button'>
+                        Отмена
                     </button>
                 </div>
             </div>

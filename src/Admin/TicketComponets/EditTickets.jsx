@@ -1,5 +1,6 @@
 import React from 'react';
 import { ticketRequests } from '../../API.js';
+import Notification from '../layout/Notification.jsx';
 import logoEdit from '../../../assets/editTicket.svg';
 import Loader from '../layout/Loader.jsx';
 import CreateEmptyTicket from './CreateEmptyTicket.jsx';
@@ -20,6 +21,7 @@ function EditTickets() {
     const [selectedQuestion, setSelectedQuestion] = React.useState({});
     const [isLoading, setIsLoading] = React.useState(false);
     const [isTagSelect, setIsTagSelect] = React.useState(false);
+    const [isNotification, setIsNotification] = React.useState(false);
     const refOption = React.useRef(null);
 
     const states = {
@@ -33,6 +35,7 @@ function EditTickets() {
         selectedQuestion,
         isLoading,
         isTagSelect,
+        isNotification,
         setAllTickets,
         setSelectedTicket,
         setLengthTicket,
@@ -44,30 +47,21 @@ function EditTickets() {
         setIsLoading,
         setIsTagSelect,
         refOption,
+        setIsNotification
     };
 
     React.useEffect(() => {
         ticketRequests.getAllTickets(setAllTickets);
     }, []);
 
-    function getSelect() {
-        const string = selectRef.current.value;
-        const numberQuestion = string.length === 16 ? string[15] : string[15] + string[16];
+    function getOption() {
+    
+        if (selectRef.current.value === 'Добавить вопрос') return setSelectedOption('Добавить вопрос');
 
-        switch (string) {
-            case `changeQuestion ${numberQuestion}`: {
-                setSelectedOption('changeQuestion');
-                setNumberQuestion(numberQuestion - 1);
-                setSelectedQuestion(selectedTicket[numberQuestion - 1]);
-                break;
-            }
-            case 'addQuestion': {
-                setSelectedOption('addQuestion');
-                break;
-            }
-            default:
-                break;
-        }
+        const indexQestion = Number(selectRef.current.value.slice(-2)) - 1;
+        setSelectedOption('Изменить вопрос');
+        setNumberQuestion(indexQestion);
+        setSelectedQuestion(selectedTicket[indexQestion]);
     }
 
     function highlight(ticketId, idSelectedTicket) {
@@ -83,6 +77,7 @@ function EditTickets() {
             </div>
 
             <div className={s.wrapper}>
+                {isNotification && <Notification/> }
                 {allTickets.map((ticketId, i) => {
                     return (
                         <div
@@ -91,7 +86,7 @@ function EditTickets() {
                             className={highlight(ticketId, idSelectedTicket)}
                         >
                             {i + 1}
-                            {i === indexTicket && isLoading ? <Loader color='green' /> : ''}
+                            {i === indexTicket && isLoading ? <Loader color='green' width={33} height={33}/> : ''}
                         </div>
                     );
                 })}
@@ -100,23 +95,23 @@ function EditTickets() {
 
             {isTagSelect && (
                 <div style={{ display: 'flex' }}>
-                    <select ref={selectRef} onChange={getSelect}>
+                    <select ref={selectRef} onChange={getOption}>
                         <option ref={refOption} hidden value=''>
                             Выберите операцию
                         </option>
 
-                        {selectedTicket.map((number, i) => {               
-                            return <option key={number.questionId} value={`changeQuestion ${i + 1}`}>{`Изменить вопрос: ${i + 1}`}</option>;
+                        {selectedTicket.map((number, i) => {
+                            return <option key={number.questionId} value={`Изменить вопрос ${i + 1}`}>{`Изменить вопрос: ${i + 1}`}</option>;
                         })}
-    
-                        <option value='addQuestion'>Добавить вопрос</option>
+
+                        <option value='Добавить вопрос'>Добавить вопрос</option>
                     </select>
                     <DeleteTicket {...states} />
                 </div>
             )}
 
-            {selectedOption === 'changeQuestion' && <EditQuestion key={numberQuestion} states={states} />}
-            {selectedOption === 'addQuestion' && <AddQuestion key={indexTicket} {...states} />}
+            {selectedOption === 'Изменить вопрос' && <EditQuestion key={numberQuestion} {...states} />}
+            {selectedOption === 'Добавить вопрос' && <AddQuestion key={indexTicket} {...states} />}
         </>
     );
 }

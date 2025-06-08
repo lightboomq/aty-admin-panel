@@ -8,7 +8,7 @@ import s from '../userStyles/getResultUser.module.css';
 function GetResultUser({ email, userName, testResult }) {
     const [questions, setQuestions] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
-    const [isLoader, setIsLoader] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     function getUserCorrectAnswers() {
         let count = 0;
@@ -34,13 +34,14 @@ function GetResultUser({ email, userName, testResult }) {
     return (
         <>
             <div className={s.wrapperLogoShowResult}>
-                {isLoader && <Loader color='blue' />}
+                
                 <img
                     src={logo}
-                    onClick={() => userRequests.getResultTestUser(email, setIsLoader, setIsOpen, setQuestions)}
+                    onClick={() => userRequests.getResultTestUser(email, setIsLoading, setIsOpen, setQuestions)}
                     style={{ cursor: 'pointer', marginLeft: '3px' }}
                     alt='resultExam'
                 />
+                { isLoading && <Loader color='blue' width={35} height={35} />}
             </div>
 
             {isOpen && (

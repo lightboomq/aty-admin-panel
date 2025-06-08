@@ -117,9 +117,9 @@ export const userRequests = {
         }
     },
 
-    async getResultTestUser(email, setIsLoader, setIsOpen, setQuestions) {
+    async getResultTestUser(email, setIsLoading, setIsOpen, setQuestions) {
         try {
-            setIsLoader(true);
+            setIsLoading(true);
             const res = await fetch('http://localhost:3333/api/userEditor/getExamResult', {
                 method: 'POST',
                 headers: {
@@ -131,8 +131,8 @@ export const userRequests = {
                 }),
             });
             const data = await res.json();
-            console.log(data)
-            setIsLoader(false);
+           
+            setIsLoading(false);
             if (res.ok) {
                 setQuestions(data);
                 setIsOpen(true);
@@ -141,7 +141,7 @@ export const userRequests = {
 
             throw new Error(res.message);
         } catch (err) {
-            catchError(err);
+            catchError(err.message);
         }
     },
 };
@@ -202,7 +202,7 @@ export const ticketRequests = {
         }
     },
 
-    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc) {
+    async addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setImgSrc, setIsNotification, setIsLoading) {
         //Компонент AddQuestion
         try {
             e.preventDefault();
@@ -210,6 +210,7 @@ export const ticketRequests = {
             const form = new FormData(e.target);
             form.append('ticketId', idSelectedTicket);
 
+            setIsLoading(true)
             const res = await fetch('http://localhost:3333/api/ticketEditor/createQuestion', {
                 method: 'POST',
                 headers: {
@@ -217,17 +218,19 @@ export const ticketRequests = {
                 },
                 body: form,
             });
+            setIsLoading(false)
 
             if (res.ok) {
+                setIsNotification(true)
+                setLengthTicket(lengthTicket + 1);
+                e.target.reset();
+                setImgSrc('');
                 Errors.setMessage('');
-                setIsGif(true);
+
                 const timerId = setTimeout(() => {
-                    setLengthTicket(lengthTicket + 1);
-                    e.target.reset();
-                    setIsGif(false);
-                    setImgSrc('');
+                    setIsNotification(false)
                     clearTimeout(timerId);
-                }, 1250);
+                }, 1500);
                 return;
             }
 
@@ -256,30 +259,30 @@ export const ticketRequests = {
             }
             throw new Error(res.message);
         } catch (err) {
-            catchError(err);
+            catchError(err.message);
         }
     },
 
     async deleteQuestion(
-        {
-            idSelectedTicket,
-            selectedQuestion,
-            setSelectedTicket,
-            numberQuestion,
-            selectedTicket,
-            setSelectedQuestion,
-            setNumberQuestion,
-            refOption,
-            setLengthTicket,
-        },
-        setIsGifDelete,
+       idSelectedTicket,
+       numberQuestion, 
+       setNumberQuestion,  
+       selectedQuestion, 
+       setIsNotification, 
+       refOption, 
+       setSelectedTicket,
+       selectedTicket, 
+       setSelectedQuestion, 
+       setIsLoadingDelete,
+       setLengthTicket
     ) {
         try {
             //Компонент EditQuestion
 
             const action = confirm('Удалить выбраный вопрос? Все данные безвозратно будут удалены');
-
             if (!action) return;
+            
+            setIsLoadingDelete(true)
             const res = await fetch('http://localhost:3333/api/ticketEditor/deleteQuestion', {
                 method: 'DELETE',
                 headers: {
@@ -291,26 +294,29 @@ export const ticketRequests = {
                     questionId: selectedQuestion.questionId,
                 }),
             });
+            setIsLoadingDelete(false)
 
-            setIsGifDelete(true);
             if (res.ok) {
-                setTimeout(() => {
-                    refOption.current.textContent = `Изменить вопрос: ${numberQuestion}`;
-                    const cloneTicket = [...selectedTicket];
-                    cloneTicket.splice(numberQuestion, 1);
-                    const cloneQuestion = { ...selectedTicket[numberQuestion - 1] };
-                    setSelectedQuestion(cloneQuestion);
-                    setNumberQuestion(numberQuestion - 1);
-                    setSelectedTicket(cloneTicket);
-                    setIsGifDelete(false);
-                    setLengthTicket(prev => prev - 1);
-                }, 1250);
+                refOption.current.textContent = `Изменить вопрос: ${numberQuestion}`;
+                const cloneTicket = [...selectedTicket];
+                cloneTicket.splice(numberQuestion, 1);
+                const cloneQuestion = { ...selectedTicket[numberQuestion - 1] };
+
+                setSelectedQuestion(cloneQuestion);
+                setNumberQuestion(numberQuestion - 1);
+                setSelectedTicket(cloneTicket);
+                setLengthTicket(prev => prev - 1);
+                setIsNotification(true)
+                const timerId = setTimeout(()=>{
+                    setIsNotification(false)
+                    clearTimeout(timerId)
+                },1500)
                 return;
             }
 
             throw new Error(res.message);
         } catch (err) {
-            Errors.setMessage(err);
+            Errors.setMessage(err.message);
         }
     },
 
@@ -332,13 +338,14 @@ export const ticketRequests = {
                 }),
             });
 
-            if (res.ok) {
-                setIsLoading(false);
+            setIsLoading(false);
+            if (res.ok) {     
                 const copy = [...allTickets];
                 copy.splice(indexTicket, 1);
                 setAllTickets(copy);
                 setIsTagSelect(false);
                 setSelectedOption('');
+
                 return;
             }
             throw new Error(res.message);
@@ -347,17 +354,16 @@ export const ticketRequests = {
         }
     },
 
-    async saveQuestion(e, { idSelectedTicket, selectedQuestion }, isImg, setIsGifSave, setIsImg) {
+    async saveQuestion(e, idSelectedTicket, selectedQuestion, setIsNotification , isImg,  setIsImg, setIsLoadingSave) {
         //Компонент EditQuestion
         try {
             e.preventDefault();
             const formData = new FormData(e.target);
-
             if (isImg) formData.delete('img');
 
             formData.append('ticketId', idSelectedTicket);
             formData.append('questionId', selectedQuestion.questionId);
-
+            setIsLoadingSave(true)
             const res = await fetch('http://localhost:3333/api/ticketEditor/editQuestion', {
                 method: 'PATCH',
                 headers: {
@@ -365,14 +371,17 @@ export const ticketRequests = {
                 },
                 body: formData,
             });
+            setIsLoadingSave(false)
 
             if (res.ok) {
-                setIsGifSave(true);
                 Errors.setMessage('');
-                setTimeout(() => {
-                    setIsGifSave(false);
-                    setIsImg(false);
-                }, 1250);
+                setIsImg(false);
+                setIsNotification(true) 
+
+                const timerId = setTimeout(()=>{
+                    setIsNotification(false)
+                    clearTimeout(timerId)
+                },1500)
                 return;
             }
 

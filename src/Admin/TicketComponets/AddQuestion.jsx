@@ -3,14 +3,15 @@ import { ticketRequests } from '../../API';
 import DragAndDrop from './DragAndDrop';
 import Errors from '../../store/Errors';
 import logoDeleteImg from '../../../assets/deleteImg.svg';
-import gif from '../../../assets/check.gif';
+import Loader from '../layout/Loader.jsx'
 import s from '../ticketStyles/addQuestion.module.css';
 import { observer } from 'mobx-react-lite';
 
-function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
+function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket, setIsNotification }) {
+
+    const [isLoading, setIsLoading] = React.useState(false);
     const [imgSrc, setImgSrc] = React.useState('');
     const [inputCount, setInputCount] = React.useState([0, 1]);
-    const [isGif, setIsGif] = React.useState(false);
     const imgRef = React.useRef(null);
     const fileInputRef = React.useRef(null);
 
@@ -54,7 +55,7 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
 
     return (
         <form
-            onSubmit={e => ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setIsGif, setImgSrc)}
+            onSubmit={e => ticketRequests.addQuestion(e, idSelectedTicket, lengthTicket, setLengthTicket, setImgSrc, setIsNotification, setIsLoading)}
             className={s.wrapper}
         >
             <h4>{`Вопрос: ${lengthTicket}`}</h4>
@@ -93,7 +94,7 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
             <button onClick={createInput} type='button' className={s.createInputBtn}>
                 Добавить поле
             </button>
-
+            
             <div className={s.wrapperInput}>
                 <textarea type='text' name='help' className={`${s.textarea} ${s.helpBtn}`} placeholder='Введите комментарий к вопросу' />
             </div>
@@ -102,7 +103,7 @@ function AddQuestion({ idSelectedTicket, lengthTicket, setLengthTicket }) {
                 <button type='submit' className={s.saveBtn}>
                     Сохранить
                 </button>
-                {isGif && <img className={s.gif} src={gif} alt='gif' />}
+                {isLoading && <Loader color='gray' width={20} height={20} positionLeft={140}/>}
                 <h4 className={s.errors}>{Errors.getMessage()}</h4>
             </div>
         </form>

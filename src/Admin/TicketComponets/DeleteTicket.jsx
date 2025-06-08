@@ -21,7 +21,7 @@ function DeleteTicket({ idSelectedTicket, allTickets, setAllTickets, indexTicket
             }
             className={s.wrapper}
         >
-            {isLoading && <Loader color='red' />}
+            {isLoading && <Loader color='red' width={27} height={27}/>}
             {indexTicket + 1}
             <span className={`${s.line} ${s.degPlus}`}> </span>
             <span className={`${s.line} ${s.degMinus}`}> </span>

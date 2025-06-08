@@ -1,34 +1,51 @@
-
-.modalWindow{
+.wrapperModalWindow{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.644);
     z-index: 10;
+    
+}
+.modalWindow{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    height: 180px;
+    background-color: rgb(255, 253, 253);
+    border-radius: 10px;
+    overflow-y: auto;
+    padding:20px;
+}
+.text{
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    position: absolute;
-    margin: 0px auto 0px auto;
-    left: 0;
-    right: 0;
-    width: 470px;
-    height: 220px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-radius: 7px;
+    align-items: center;
     text-align: center;
+    width: 100%;
+    height: 110px;
+    overflow: auto;
+    padding:10px
 }
-.btnModal{
+.wrapperBtns{
     display: flex;
     justify-content: space-evenly;
     width: 100%;
-    margin-top: 15px;
 }
 .btn{
     all: unset;
-    font-size: 20px;
+    text-align: center;
+    border-radius: 4px;
+    width: 80px;
+    height: 30px;
     cursor: pointer;
-    padding: 10px;
-    border-radius: 11px;
+    color: #168ADE;
+    background-color: #ddeefc;
+    font-weight: 200;
 }
-.value{
-    margin-top: 15px;
-    font-size: 20px;
-}
+
